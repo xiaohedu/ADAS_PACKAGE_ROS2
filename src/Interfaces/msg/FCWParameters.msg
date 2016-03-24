@@ -1,0 +1,8 @@
+bool make_gray 
+float32 scale
+float32 hit_threshold
+int32 gr_threshold
+int32 nlevels
+int32 combo_id
+bool gamma_corr
+

@@ -14,6 +14,7 @@
 #include <sys/types.h> // for "stat" function
 #include <sys/stat.h>
 #include <unistd.h>
+#include <adas_interfaces/msg/fcw_parameters.hpp>
 #include "../Aux/common.hpp"
 #include <sys/types.h> // for "opendir" function
 #include <dirent.h>
@@ -23,48 +24,30 @@ using namespace cv;
 
 bool help_showed = false;
 
-class Args {
-public:
-  Args();
-  static Args read(int argc, char** argv);
+struct  FCW_Parameters {
 
- /* string src;
+	FCW_Parameters(): make_gray (false), scale (1.12), nlevels (13), gr_threshold (0), hit_threshold (1.4),  gamma_corr(true) {}
 
-  bool src_is_video;
-  bool file_gen;
-	bool headless;
-  bool src_is_camera;
-  bool src_is_directory;
 
-  int camera_id;
 
-  bool write_video;
-  string dst_video;
-  double dst_video_fps;
-*/
   bool make_gray;
-
-  /*bool resize_src;
-  int width, height;
-*/
   double scale;
   int nlevels;
   int gr_threshold;
-
   double hit_threshold;
-  bool hit_threshold_auto;
-
-  /*int win_width;
-  int win_stride_width, win_stride_height;*/
-
   bool gamma_corr;
 };
+
+
+
+
 /* class App is the class handling all the file's parameters*/
-class App: public rclcpp::Node {
+class App: public rclcpp::Node
+
+{
 
 public:
-  App(const std::string & input, const std::string & output, Args a);
-  void run();
+  App(const std::string & input, const std::string & output);
   void before_run();
   void handleKey(char key);
 
@@ -80,8 +63,7 @@ public:
 
 private:
   App operator=(App&);
-
-  Args args;
+  FCW_Parameters param_;
   bool running;
 
   bool use_gpu;
@@ -101,6 +83,7 @@ private:
 
   rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr pub_;
   rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr sub_;
+ rclcpp::Subscription<adas_interfaces::msg::FCWParameters>::SharedPtr ctrlsub_;
 
 //Internal
   int width_run, height_run;
@@ -198,113 +181,77 @@ String detector_out(Rect* r , string &classifiers_tag) {
   return txt_out_string;
 }
 
-Args::Args() {
-  /*camera_id = 0;
-  file_gen = false;
-	headless = false;
-  write_video = false;
-  dst_video_fps = 24.;*/
 
-  make_gray = false;
-
-  /*resize_src = false;
-  width = 640;
-  height = 480;*/
-
-  scale = 1.12; // "optimal" for KITTI dataset
-  nlevels = 13;
-  gr_threshold = 0;
-  hit_threshold = 1.4;
-  /*hit_threshold_auto = true;
-
-  win_width = 64;
-  win_stride_width = 8;
-  win_stride_height = 8;*/
-  gamma_corr = true;
-
-}
-// here we read to check for the provided flags that indicate pre run desired settings
-/*Args Args::read(int argc, char** argv) {
-
-  Args args;
-  for (int i = 1; i < argc; i++) { // desired input settings
-    if (string(argv[i]) == "--make_gray")
-      args.make_gray = (string(argv[++i]) == "true");
-    else if (string(argv[i]) == "--resize_src")
-      args.resize_src = (string(argv[++i]) == "true");
-    else if (string(argv[i]) == "--width")
-      args.width = atoi(argv[++i]);
-    else if (string(argv[i]) == "--height")
-      args.height = atoi(argv[++i]);
-
-    else if (string(argv[i]) == "--hit_threshold") {
-      args.hit_threshold = atof(argv[++i]);
-      args.hit_threshold_auto = false;
-    } else if (string(argv[i]) == "--scale")
-      args.scale = atof(argv[++i]);
-    else if (string(argv[i]) == "--nlevels")
-      args.nlevels = atoi(argv[++i]);
-    else if (string(argv[i]) == "--win_width")
-      args.win_width = atoi(argv[++i]);
-    else if (string(argv[i]) == "--win_stride_width")
-      args.win_stride_width = atoi(argv[++i]);
-    else if (string(argv[i]) == "--win_stride_height")
-      args.win_stride_height = atoi(argv[++i]);
-    else if (string(argv[i]) == "--gr_threshold")
-      args.gr_threshold = atoi(argv[++i]);
-    else if (string(argv[i]) == "--gamma_correct")
-      args.gamma_corr = (string(argv[++i]) == "true");
-    else if (string(argv[i]) == "--write_video")
-      args.write_video = (string(argv[++i]) == "true");
-    else if (string(argv[i]) == "--dst_video")
-      args.dst_video = argv[++i];
-    else if (string(argv[i]) == "--dst_video_fps")
-      args.dst_video_fps = atof(argv[++i]);
-    else if (string(argv[i]) == "--help")
-      printHelp();
-    else if (string(argv[i]) == "--write_file")
-      args.file_gen = true; //txtGenerator(argc, argv) ;
-        else if (string(argv[i]) == "--headless")
-			args.headless = true; //disabling image display ;
-    else if (string(argv[i]) == "--video") {
-      args.src = argv[++i];
-      args.src_is_video = true;
-    } else if (string(argv[i]) == "--camera") {
-      args.camera_id = atoi(argv[++i]);
-      args.src_is_camera = true;
-    } else if (args.src.empty())
-      args.src = argv[i];
-    else
-      throw runtime_error((string("unknown key: ") + argv[i]));
-  }
-  return args;
-}*/
-
-/**
- Controls
- The default values for training are shown between braces.
- Hence the flags for training are: --scale 1.12 --nlevels 13 --gr_threshold 0 --hit_threshold 0
- -HOG scale (1.12):
- Scaling factor between two successive ROI window sizes.
- -Levels count (13):
- Maximal size of the ROI window. The detector searches using every size from 1 up to that value.
- -HOG group threshold (0):
- Post-detection grouping of the ROI.
- -Hit threshold (0):
- Displaces the mathematic decision surface of the SVM model.
- */
-
-App::App(const std::string & input, const std::string & output, Args a) :
+App::App(const std::string & input, const std::string & output) :
     Node("detector_node", true)
 
 {
 
-  /*cout << "input= " << input << endl;
-  cout << "output= " << output << endl;*/
+
+
+
+	// Create a subscription on the input topic which prints on receipt of new messages.
+	      ctrlsub_ = this->create_subscription<adas_interfaces::msg::FCWParameters>("ADAS_command_FCW", [this] (adas_interfaces::msg::FCWParameters::UniquePtr msg)
+	       {
+
+	    		  if(msg)
+	    			  this->gamma_corr= msg->gamma_corr;
+	    		  	  this->gr_threshold= msg->gr_threshold;
+	    		  	  this->hit_threshold = msg->hit_threshold;
+	    		  	  this->make_gray = msg->make_gray;
+	    		  	  this->nlevels= msg->nlevels;
+	    		  	  this->scale =msg->scale;
+
+
+	    		    	  std::cout<<"======================================================"<<endl;
+	    		    	  std::cout<<"                  FCW Configured                     "<<endl<<endl;
+
+
+	    		    	  cout << "Scale: " << scale << endl;
+	    		    	  /*if (args.resize_src) // incase image resize is requested as an input then print the other parameters
+	    		    	    cout << "Resized source: (" << args.width << ", " << args.height
+	    		    	        << ")\n";*/
+	    		    	  cout << "Group threshold: " << gr_threshold << endl;
+	    		    	  cout << "Levels number: " << nlevels << endl;
+	    		    	 /* cout << "Win width: " << args.win_width << endl;
+	    		    	  cout << "Win stride: (" << args.win_stride_width << ", "
+	    		    	      << args.win_stride_height << ")\n";*/
+	    		    	  cout << "Hit threshold: " << hit_threshold << endl;
+	    		    	  cout << "Gamma correction: " << gamma_corr << endl;
+	    		    	  cout << endl;
+	    		    	  std::cout<<"======================================================"<<endl;
+	    		    	 	    		    	  std::cout<<endl<<endl<<endl ;
+
+
+
+	        }, rmw_qos_profile_default);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   cv::gpu::printShortCudaDeviceInfo(cv::gpu::getDevice());
-  
-  
+
 
   auto qos = rmw_qos_profile_sensor_data;
 
@@ -312,43 +259,16 @@ App::App(const std::string & input, const std::string & output, Args a) :
   pub_ = this->create_publisher < sensor_msgs::msg::Image > (output, qos);
   std::weak_ptr < std::remove_pointer<decltype(pub_.get())>::type> captured_pub = pub_;
 
-  args = a;
-  cout << "\nControls:\n" << "\tESC - exit\n"
-      << "\tm - change mode GPU <-> CPU\n"
-      << "\tg - convert image to gray or not\n"
-      << "\t1/q - increase/decrease HOG scale\n"
-      << "\t2/w - increase/decrease levels count\n"
-      << "\t3/e - increase/decrease HOG group threshold\n"
-      << "\t4/r - increase/decrease hit threshold\n" << endl;
 
   use_gpu = true; // set as deafult to use gpu not cpu
-  make_gray = args.make_gray;
-  scale = args.scale;
-  gr_threshold = args.gr_threshold;
-  nlevels = args.nlevels;
-  // copying the inputs to the variables
-  /*if (args.hit_threshold_auto)
-    args.hit_threshold = args.win_width == 48 ? 1.4 : 0;*/
-  hit_threshold = args.hit_threshold;
+  make_gray = param_.make_gray;
+  scale = param_.scale;
+  gr_threshold = param_.gr_threshold;
+  nlevels = param_.nlevels;
+  hit_threshold = param_.hit_threshold;
+  gamma_corr = param_.gamma_corr;
 
-  gamma_corr = args.gamma_corr;
 
-  /*
-   if (args.win_width != 64 && args.win_width != 48)
-   args.win_width = 64;*/
-
-  cout << "Scale: " << scale << endl;
-  /*if (args.resize_src) // incase image resize is requested as an input then print the other parameters
-    cout << "Resized source: (" << args.width << ", " << args.height
-        << ")\n";*/
-  cout << "Group threshold: " << gr_threshold << endl;
-  cout << "Levels number: " << nlevels << endl;
- /* cout << "Win width: " << args.win_width << endl;
-  cout << "Win stride: (" << args.win_stride_width << ", "
-      << args.win_stride_height << ")\n";*/
-  cout << "Hit threshold: " << hit_threshold << endl;
-  cout << "Gamma correction: " << gamma_corr << endl;
-  cout << endl;
 
   before_run();
  
@@ -826,12 +746,7 @@ void App::before_run() {
 	}*/
 }
 
-void App::run() {
 
-  while (running) {
-
-  }
-}
 
 void App::handleKey(char key) {
 	switch (key) {
