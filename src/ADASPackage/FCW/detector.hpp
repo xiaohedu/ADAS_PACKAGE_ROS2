@@ -26,16 +26,16 @@ bool help_showed = false;
 
 struct  FCW_Parameters {
 
-	FCW_Parameters(): make_gray (false), scale (1.12), nlevels (13), gr_threshold (0), hit_threshold (1.4),  gamma_corr(true) {}
-
-
+	FCW_Parameters(): make_gray (false), scale (1.12), nlevels (13), gr_threshold (0), hit_threshold (1.4),  processor(true), cardetector(false){}
 
   bool make_gray;
   double scale;
   int nlevels;
   int gr_threshold;
   double hit_threshold;
-  bool gamma_corr;
+  bool processor;
+  bool cardetector;
+
 };
 
 
@@ -67,6 +67,7 @@ private:
   bool running;
 
   bool use_gpu;
+  bool cardetector;
   bool make_gray;
 
   double scale;
@@ -164,7 +165,8 @@ void write_file(string filename, string &write_txt) {
   return;
 }
 // the function detector_out returns the string which will be the content of the generated txt file for the negative mining.
-String detector_out(Rect* r , string &classifiers_tag) {
+string detector_out(Rect* r , string &classifiers_tag)
+{
   int x1;
   int x2;
   int y1;
@@ -195,12 +197,13 @@ App::App(const std::string & input, const std::string & output) :
 	       {
 
 	    		  if(msg)
-	    			  this->gamma_corr= msg->gamma_corr;
 	    		  	  this->gr_threshold= msg->gr_threshold;
 	    		  	  this->hit_threshold = msg->hit_threshold;
 	    		  	  this->make_gray = msg->make_gray;
 	    		  	  this->nlevels= msg->nlevels;
 	    		  	  this->scale =msg->scale;
+	    		  	  this->use_gpu = msg->processor;
+	    		  	  this->cardetector= msg->cardetector;
 
 
 	    		    	  std::cout<<"======================================================"<<endl;
@@ -260,13 +263,14 @@ App::App(const std::string & input, const std::string & output) :
   std::weak_ptr < std::remove_pointer<decltype(pub_.get())>::type> captured_pub = pub_;
 
 
-  use_gpu = true; // set as deafult to use gpu not cpu
+  use_gpu = param_.processor; // set as deafult to use gpu not cpu
   make_gray = param_.make_gray;
   scale = param_.scale;
   gr_threshold = param_.gr_threshold;
   nlevels = param_.nlevels;
   hit_threshold = param_.hit_threshold;
-  gamma_corr = param_.gamma_corr;
+  cardetector = param_.cardetector;
+
 
 
 
@@ -281,6 +285,10 @@ App::App(const std::string & input, const std::string & output) :
   sub_ = this->create_subscription < sensor_msgs::msg::Image> (input, [this, captured_pub](sensor_msgs::msg::Image::UniquePtr msg)
 
           {
+
+
+
+
 	    
        auto pub_ptr = captured_pub.lock();     
        if (!pub_ptr) {return;}
@@ -693,7 +701,7 @@ void App::before_run() {
 	string colors;    // the string containging the colors values
 	string green_blue; //The substring which will contain the color values for green and blue
 	string blue; // The string containing the blue color value for the corresponding detector box (0->255)
-	String red; // The string containing the red color value for the corresponding detector box (0->255)
+	string red; // The string containing the red color value for the corresponding detector box (0->255)
 	string green; // The string containing the green color value for the corresponding detector box (0->255)
 		string tag; // Tag that specifies the current classifier
 	

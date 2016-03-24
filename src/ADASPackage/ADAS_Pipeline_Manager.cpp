@@ -17,6 +17,7 @@
 #include "std_msgs/msg/int32.hpp"
 #include <adas_interfaces/msg/source_parameters.hpp>
 #include <adas_interfaces/msg/ldw_parameters.hpp>
+#include <adas_interfaces/msg/fcw_parameters.hpp>
 #include <chrono>
 #include <cinttypes>
 #include <cstdio>
@@ -118,11 +119,11 @@ public:
 		ldw_pub_ = this->create_publisher<adas_interfaces::msg::LDWParameters>("ADAS_command_LDW", custom_qos_profile);
 		std::weak_ptr<std::remove_pointer<decltype(ldw_pub_.get())>::type> ldw_captured_pub = ldw_pub_;
 
-		 // fcw_pub_ = this->create_publisher<std_msgs::msg::Int32>(output, custom_qos_profile);
-		  //std::weak_ptr<std::remove_pointer<decltype(fcw_pub_.get())>::type> fcw_captured_pub = fcw_pub_;
+		 fcw_pub_ = this->create_publisher<adas_interfaces::msg::FCWParameters>("ADAS_command_FCW", custom_qos_profile);
+		 std::weak_ptr<std::remove_pointer<decltype(fcw_pub_.get())>::type> fcw_captured_pub = fcw_pub_;
 
 
-auto callback = [&client_request, &exec,src_captured_pub, ldw_captured_pub, this]() -> void
+auto callback = [&client_request, &exec,src_captured_pub, ldw_captured_pub,fcw_captured_pub, this]() -> void
 {
 
 	if (client_request.load()== true)
@@ -196,10 +197,9 @@ auto callback = [&client_request, &exec,src_captured_pub, ldw_captured_pub, this
 		    		  					return;
 
 		    		  msg->lane_detector= config.lane_detector();
-		    		  msg->alpha = config.alpha();
+		    		  msg->alpha = config.coef_thetamax();
 		    		  msg->pitch_angle= config.pitch_angle();
 		    		  msg->yaw_angle = config.yaw_angle();
-		    		  msg->filter_id = config.filters();
 		    		  msg->combo_id = config.detection_combination();
 
 
@@ -210,6 +210,23 @@ auto callback = [&client_request, &exec,src_captured_pub, ldw_captured_pub, this
 /*SEND BACK THE PIPELINECONFIG*/
 		       else if  (msg_android_->messagetype() == MessageType::FCW_Config)
 			  {
+
+		    	   Message::FCWConfig config = msg_android_->fcw_config();
+
+		    	   adas_interfaces::msg::FCWParameters::UniquePtr msg (new adas_interfaces::msg::FCWParameters());
+
+		    	   auto pub_ptr = fcw_captured_pub.lock();
+		    	  		    		  					if (!pub_ptr)
+		    	  		    		  					return;
+
+		    	  		   msg->gr_threshold=config.hoggroupthresholdinit();
+		    	  		   msg->nlevels = config.levelscount();
+		    	  		   msg->make_gray= config.grayinit();
+		    	  		   msg->scale = config.hogscaleinit();
+		    	  		   msg->hit_threshold = config.hitthreshold();
+
+
+
 
 			  }
 
@@ -241,7 +258,7 @@ private :
 	rclcpp::TimerBase::SharedPtr timer_;
 	rclcpp::Publisher<adas_interfaces::msg::SourceParameters>::SharedPtr src_pub_;
 	rclcpp::Publisher<adas_interfaces::msg::LDWParameters>::SharedPtr ldw_pub_;
-	rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr fcw_pub_;
+	rclcpp::Publisher<adas_interfaces::msg::FCWParameters>::SharedPtr fcw_pub_;
 };
 
 

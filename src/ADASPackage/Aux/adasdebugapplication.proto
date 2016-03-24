@@ -28,6 +28,13 @@ option java_outer_classname = "AdasDebugApplication";
 	    FOLDER = 1;
 	}
 
+	enum Type {
+	    Int = 0;
+	    Double = 1;
+	    String = 2;
+	    Boolean = 3;
+	}
+
 
 message Message {
 
@@ -48,9 +55,9 @@ message Message {
 	  required bool lane_detector = 1;
 	  required double yaw_angle = 2;
 	  required double pitch_angle = 3;
-	  optional double alpha = 4;
-	  optional int32 filters = 5;
-	  optional int32 detection_combination = 6;
+	  optional double Coef_thetaMax = 4;
+	  optional int32 detection_combination = 5;
+	  optional CustomField custom = 6;
 
 	}
 	optional LDWConfig ldw_config = 3;
@@ -58,16 +65,29 @@ message Message {
 
 	message FCWConfig {
           required bool car_detector = 1;
-	  required bool GrayInit = 2;
-	  required double HOGscaleInit = 3;
-	  required int32 LevelsCount = 4;
-	  required int32 HOGgroupThresholdInit = 5;
-	  required double HitThreshold = 6;
-	  optional bool headless = 7;
-	  optional bool WriteFile = 8;
+	  required bool processor = 2;
+	  required bool GrayInit = 3;
+	  required double HOGscaleInit = 4;
+	  required int32 LevelsCount = 5;
+	  required int32 HOGgroupThresholdInit = 6;
+	  required double HitThreshold = 7;
+	  optional CustomField custom = 8;
 
 	}
 	optional FCWConfig fcw_config = 4;
+
+
+	message CustomField {
+	
+	  required string name = 1;
+	  required Type type = 2;
+	  required string value = 3;
+
+
+	}
+
+
+
 
 }
 

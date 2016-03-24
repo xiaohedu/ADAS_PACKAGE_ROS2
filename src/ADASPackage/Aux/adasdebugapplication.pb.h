@@ -38,6 +38,7 @@ class Message;
 class Message_PipelineConfig;
 class Message_LDWConfig;
 class Message_FCWConfig;
+class Message_CustomField;
 
 enum MessageType {
   PipeLine_Config = 0,
@@ -116,6 +117,27 @@ inline bool Source_Parse(
     const ::std::string& name, Source* value) {
   return ::google::protobuf::internal::ParseNamedEnum<Source>(
     Source_descriptor(), name, value);
+}
+enum Type {
+  Int = 0,
+  Double = 1,
+  String = 2,
+  Boolean = 3
+};
+bool Type_IsValid(int value);
+const Type Type_MIN = Int;
+const Type Type_MAX = Boolean;
+const int Type_ARRAYSIZE = Type_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* Type_descriptor();
+inline const ::std::string& Type_Name(Type value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    Type_descriptor(), value);
+}
+inline bool Type_Parse(
+    const ::std::string& name, Type* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<Type>(
+    Type_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -322,26 +344,28 @@ class Message_LDWConfig : public ::google::protobuf::Message {
   inline double pitch_angle() const;
   inline void set_pitch_angle(double value);
 
-  // optional double alpha = 4;
-  inline bool has_alpha() const;
-  inline void clear_alpha();
-  static const int kAlphaFieldNumber = 4;
-  inline double alpha() const;
-  inline void set_alpha(double value);
+  // optional double Coef_thetaMax = 4;
+  inline bool has_coef_thetamax() const;
+  inline void clear_coef_thetamax();
+  static const int kCoefThetaMaxFieldNumber = 4;
+  inline double coef_thetamax() const;
+  inline void set_coef_thetamax(double value);
 
-  // optional int32 filters = 5;
-  inline bool has_filters() const;
-  inline void clear_filters();
-  static const int kFiltersFieldNumber = 5;
-  inline ::google::protobuf::int32 filters() const;
-  inline void set_filters(::google::protobuf::int32 value);
-
-  // optional int32 detection_combination = 6;
+  // optional int32 detection_combination = 5;
   inline bool has_detection_combination() const;
   inline void clear_detection_combination();
-  static const int kDetectionCombinationFieldNumber = 6;
+  static const int kDetectionCombinationFieldNumber = 5;
   inline ::google::protobuf::int32 detection_combination() const;
   inline void set_detection_combination(::google::protobuf::int32 value);
+
+  // optional .ADAS_Debug_Application.Message.CustomField custom = 6;
+  inline bool has_custom() const;
+  inline void clear_custom();
+  static const int kCustomFieldNumber = 6;
+  inline const ::ADAS_Debug_Application::Message_CustomField& custom() const;
+  inline ::ADAS_Debug_Application::Message_CustomField* mutable_custom();
+  inline ::ADAS_Debug_Application::Message_CustomField* release_custom();
+  inline void set_allocated_custom(::ADAS_Debug_Application::Message_CustomField* custom);
 
   // @@protoc_insertion_point(class_scope:ADAS_Debug_Application.Message.LDWConfig)
  private:
@@ -351,12 +375,12 @@ class Message_LDWConfig : public ::google::protobuf::Message {
   inline void clear_has_yaw_angle();
   inline void set_has_pitch_angle();
   inline void clear_has_pitch_angle();
-  inline void set_has_alpha();
-  inline void clear_has_alpha();
-  inline void set_has_filters();
-  inline void clear_has_filters();
+  inline void set_has_coef_thetamax();
+  inline void clear_has_coef_thetamax();
   inline void set_has_detection_combination();
   inline void clear_has_detection_combination();
+  inline void set_has_custom();
+  inline void clear_has_custom();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -365,9 +389,9 @@ class Message_LDWConfig : public ::google::protobuf::Message {
   double yaw_angle_;
   double pitch_angle_;
   bool lane_detector_;
-  ::google::protobuf::int32 filters_;
-  double alpha_;
   ::google::protobuf::int32 detection_combination_;
+  double coef_thetamax_;
+  ::ADAS_Debug_Application::Message_CustomField* custom_;
   friend void  protobuf_AddDesc_adasdebugapplication_2eproto();
   friend void protobuf_AssignDesc_adasdebugapplication_2eproto();
   friend void protobuf_ShutdownFile_adasdebugapplication_2eproto();
@@ -437,59 +461,63 @@ class Message_FCWConfig : public ::google::protobuf::Message {
   inline bool car_detector() const;
   inline void set_car_detector(bool value);
 
-  // required bool GrayInit = 2;
+  // required bool processor = 2;
+  inline bool has_processor() const;
+  inline void clear_processor();
+  static const int kProcessorFieldNumber = 2;
+  inline bool processor() const;
+  inline void set_processor(bool value);
+
+  // required bool GrayInit = 3;
   inline bool has_grayinit() const;
   inline void clear_grayinit();
-  static const int kGrayInitFieldNumber = 2;
+  static const int kGrayInitFieldNumber = 3;
   inline bool grayinit() const;
   inline void set_grayinit(bool value);
 
-  // required double HOGscaleInit = 3;
+  // required double HOGscaleInit = 4;
   inline bool has_hogscaleinit() const;
   inline void clear_hogscaleinit();
-  static const int kHOGscaleInitFieldNumber = 3;
+  static const int kHOGscaleInitFieldNumber = 4;
   inline double hogscaleinit() const;
   inline void set_hogscaleinit(double value);
 
-  // required int32 LevelsCount = 4;
+  // required int32 LevelsCount = 5;
   inline bool has_levelscount() const;
   inline void clear_levelscount();
-  static const int kLevelsCountFieldNumber = 4;
+  static const int kLevelsCountFieldNumber = 5;
   inline ::google::protobuf::int32 levelscount() const;
   inline void set_levelscount(::google::protobuf::int32 value);
 
-  // required int32 HOGgroupThresholdInit = 5;
+  // required int32 HOGgroupThresholdInit = 6;
   inline bool has_hoggroupthresholdinit() const;
   inline void clear_hoggroupthresholdinit();
-  static const int kHOGgroupThresholdInitFieldNumber = 5;
+  static const int kHOGgroupThresholdInitFieldNumber = 6;
   inline ::google::protobuf::int32 hoggroupthresholdinit() const;
   inline void set_hoggroupthresholdinit(::google::protobuf::int32 value);
 
-  // required double HitThreshold = 6;
+  // required double HitThreshold = 7;
   inline bool has_hitthreshold() const;
   inline void clear_hitthreshold();
-  static const int kHitThresholdFieldNumber = 6;
+  static const int kHitThresholdFieldNumber = 7;
   inline double hitthreshold() const;
   inline void set_hitthreshold(double value);
 
-  // optional bool headless = 7;
-  inline bool has_headless() const;
-  inline void clear_headless();
-  static const int kHeadlessFieldNumber = 7;
-  inline bool headless() const;
-  inline void set_headless(bool value);
-
-  // optional bool WriteFile = 8;
-  inline bool has_writefile() const;
-  inline void clear_writefile();
-  static const int kWriteFileFieldNumber = 8;
-  inline bool writefile() const;
-  inline void set_writefile(bool value);
+  // optional .ADAS_Debug_Application.Message.CustomField custom = 8;
+  inline bool has_custom() const;
+  inline void clear_custom();
+  static const int kCustomFieldNumber = 8;
+  inline const ::ADAS_Debug_Application::Message_CustomField& custom() const;
+  inline ::ADAS_Debug_Application::Message_CustomField* mutable_custom();
+  inline ::ADAS_Debug_Application::Message_CustomField* release_custom();
+  inline void set_allocated_custom(::ADAS_Debug_Application::Message_CustomField* custom);
 
   // @@protoc_insertion_point(class_scope:ADAS_Debug_Application.Message.FCWConfig)
  private:
   inline void set_has_car_detector();
   inline void clear_has_car_detector();
+  inline void set_has_processor();
+  inline void clear_has_processor();
   inline void set_has_grayinit();
   inline void clear_has_grayinit();
   inline void set_has_hogscaleinit();
@@ -500,22 +528,20 @@ class Message_FCWConfig : public ::google::protobuf::Message {
   inline void clear_has_hoggroupthresholdinit();
   inline void set_has_hitthreshold();
   inline void clear_has_hitthreshold();
-  inline void set_has_headless();
-  inline void clear_has_headless();
-  inline void set_has_writefile();
-  inline void clear_has_writefile();
+  inline void set_has_custom();
+  inline void clear_has_custom();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  double hogscaleinit_;
-  ::google::protobuf::int32 levelscount_;
   bool car_detector_;
+  bool processor_;
   bool grayinit_;
-  bool headless_;
-  bool writefile_;
+  ::google::protobuf::int32 levelscount_;
+  double hogscaleinit_;
   double hitthreshold_;
+  ::ADAS_Debug_Application::Message_CustomField* custom_;
   ::google::protobuf::int32 hoggroupthresholdinit_;
   friend void  protobuf_AddDesc_adasdebugapplication_2eproto();
   friend void protobuf_AssignDesc_adasdebugapplication_2eproto();
@@ -523,6 +549,115 @@ class Message_FCWConfig : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static Message_FCWConfig* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class Message_CustomField : public ::google::protobuf::Message {
+ public:
+  Message_CustomField();
+  virtual ~Message_CustomField();
+
+  Message_CustomField(const Message_CustomField& from);
+
+  inline Message_CustomField& operator=(const Message_CustomField& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const Message_CustomField& default_instance();
+
+  void Swap(Message_CustomField* other);
+
+  // implements Message ----------------------------------------------
+
+  Message_CustomField* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const Message_CustomField& from);
+  void MergeFrom(const Message_CustomField& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required string name = 1;
+  inline bool has_name() const;
+  inline void clear_name();
+  static const int kNameFieldNumber = 1;
+  inline const ::std::string& name() const;
+  inline void set_name(const ::std::string& value);
+  inline void set_name(const char* value);
+  inline void set_name(const char* value, size_t size);
+  inline ::std::string* mutable_name();
+  inline ::std::string* release_name();
+  inline void set_allocated_name(::std::string* name);
+
+  // required .ADAS_Debug_Application.Type type = 2;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 2;
+  inline ::ADAS_Debug_Application::Type type() const;
+  inline void set_type(::ADAS_Debug_Application::Type value);
+
+  // required string value = 3;
+  inline bool has_value() const;
+  inline void clear_value();
+  static const int kValueFieldNumber = 3;
+  inline const ::std::string& value() const;
+  inline void set_value(const ::std::string& value);
+  inline void set_value(const char* value);
+  inline void set_value(const char* value, size_t size);
+  inline ::std::string* mutable_value();
+  inline ::std::string* release_value();
+  inline void set_allocated_value(::std::string* value);
+
+  // @@protoc_insertion_point(class_scope:ADAS_Debug_Application.Message.CustomField)
+ private:
+  inline void set_has_name();
+  inline void clear_has_name();
+  inline void set_has_type();
+  inline void clear_has_type();
+  inline void set_has_value();
+  inline void clear_has_value();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::std::string* name_;
+  ::std::string* value_;
+  int type_;
+  friend void  protobuf_AddDesc_adasdebugapplication_2eproto();
+  friend void protobuf_AssignDesc_adasdebugapplication_2eproto();
+  friend void protobuf_ShutdownFile_adasdebugapplication_2eproto();
+
+  void InitAsDefaultInstance();
+  static Message_CustomField* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -580,6 +715,7 @@ class Message : public ::google::protobuf::Message {
   typedef Message_PipelineConfig PipelineConfig;
   typedef Message_LDWConfig LDWConfig;
   typedef Message_FCWConfig FCWConfig;
+  typedef Message_CustomField CustomField;
 
   // accessors -------------------------------------------------------
 
@@ -953,63 +1089,39 @@ inline void Message_LDWConfig::set_pitch_angle(double value) {
   // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.LDWConfig.pitch_angle)
 }
 
-// optional double alpha = 4;
-inline bool Message_LDWConfig::has_alpha() const {
+// optional double Coef_thetaMax = 4;
+inline bool Message_LDWConfig::has_coef_thetamax() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void Message_LDWConfig::set_has_alpha() {
+inline void Message_LDWConfig::set_has_coef_thetamax() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void Message_LDWConfig::clear_has_alpha() {
+inline void Message_LDWConfig::clear_has_coef_thetamax() {
   _has_bits_[0] &= ~0x00000008u;
 }
-inline void Message_LDWConfig::clear_alpha() {
-  alpha_ = 0;
-  clear_has_alpha();
+inline void Message_LDWConfig::clear_coef_thetamax() {
+  coef_thetamax_ = 0;
+  clear_has_coef_thetamax();
 }
-inline double Message_LDWConfig::alpha() const {
-  // @@protoc_insertion_point(field_get:ADAS_Debug_Application.Message.LDWConfig.alpha)
-  return alpha_;
+inline double Message_LDWConfig::coef_thetamax() const {
+  // @@protoc_insertion_point(field_get:ADAS_Debug_Application.Message.LDWConfig.Coef_thetaMax)
+  return coef_thetamax_;
 }
-inline void Message_LDWConfig::set_alpha(double value) {
-  set_has_alpha();
-  alpha_ = value;
-  // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.LDWConfig.alpha)
+inline void Message_LDWConfig::set_coef_thetamax(double value) {
+  set_has_coef_thetamax();
+  coef_thetamax_ = value;
+  // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.LDWConfig.Coef_thetaMax)
 }
 
-// optional int32 filters = 5;
-inline bool Message_LDWConfig::has_filters() const {
+// optional int32 detection_combination = 5;
+inline bool Message_LDWConfig::has_detection_combination() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
-inline void Message_LDWConfig::set_has_filters() {
+inline void Message_LDWConfig::set_has_detection_combination() {
   _has_bits_[0] |= 0x00000010u;
 }
-inline void Message_LDWConfig::clear_has_filters() {
-  _has_bits_[0] &= ~0x00000010u;
-}
-inline void Message_LDWConfig::clear_filters() {
-  filters_ = 0;
-  clear_has_filters();
-}
-inline ::google::protobuf::int32 Message_LDWConfig::filters() const {
-  // @@protoc_insertion_point(field_get:ADAS_Debug_Application.Message.LDWConfig.filters)
-  return filters_;
-}
-inline void Message_LDWConfig::set_filters(::google::protobuf::int32 value) {
-  set_has_filters();
-  filters_ = value;
-  // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.LDWConfig.filters)
-}
-
-// optional int32 detection_combination = 6;
-inline bool Message_LDWConfig::has_detection_combination() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
-}
-inline void Message_LDWConfig::set_has_detection_combination() {
-  _has_bits_[0] |= 0x00000020u;
-}
 inline void Message_LDWConfig::clear_has_detection_combination() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void Message_LDWConfig::clear_detection_combination() {
   detection_combination_ = 0;
@@ -1023,6 +1135,47 @@ inline void Message_LDWConfig::set_detection_combination(::google::protobuf::int
   set_has_detection_combination();
   detection_combination_ = value;
   // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.LDWConfig.detection_combination)
+}
+
+// optional .ADAS_Debug_Application.Message.CustomField custom = 6;
+inline bool Message_LDWConfig::has_custom() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void Message_LDWConfig::set_has_custom() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void Message_LDWConfig::clear_has_custom() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void Message_LDWConfig::clear_custom() {
+  if (custom_ != NULL) custom_->::ADAS_Debug_Application::Message_CustomField::Clear();
+  clear_has_custom();
+}
+inline const ::ADAS_Debug_Application::Message_CustomField& Message_LDWConfig::custom() const {
+  // @@protoc_insertion_point(field_get:ADAS_Debug_Application.Message.LDWConfig.custom)
+  return custom_ != NULL ? *custom_ : *default_instance_->custom_;
+}
+inline ::ADAS_Debug_Application::Message_CustomField* Message_LDWConfig::mutable_custom() {
+  set_has_custom();
+  if (custom_ == NULL) custom_ = new ::ADAS_Debug_Application::Message_CustomField;
+  // @@protoc_insertion_point(field_mutable:ADAS_Debug_Application.Message.LDWConfig.custom)
+  return custom_;
+}
+inline ::ADAS_Debug_Application::Message_CustomField* Message_LDWConfig::release_custom() {
+  clear_has_custom();
+  ::ADAS_Debug_Application::Message_CustomField* temp = custom_;
+  custom_ = NULL;
+  return temp;
+}
+inline void Message_LDWConfig::set_allocated_custom(::ADAS_Debug_Application::Message_CustomField* custom) {
+  delete custom_;
+  custom_ = custom;
+  if (custom) {
+    set_has_custom();
+  } else {
+    clear_has_custom();
+  }
+  // @@protoc_insertion_point(field_set_allocated:ADAS_Debug_Application.Message.LDWConfig.custom)
 }
 
 // -------------------------------------------------------------------
@@ -1053,15 +1206,39 @@ inline void Message_FCWConfig::set_car_detector(bool value) {
   // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.car_detector)
 }
 
-// required bool GrayInit = 2;
-inline bool Message_FCWConfig::has_grayinit() const {
+// required bool processor = 2;
+inline bool Message_FCWConfig::has_processor() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void Message_FCWConfig::set_has_grayinit() {
+inline void Message_FCWConfig::set_has_processor() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void Message_FCWConfig::clear_has_grayinit() {
+inline void Message_FCWConfig::clear_has_processor() {
   _has_bits_[0] &= ~0x00000002u;
+}
+inline void Message_FCWConfig::clear_processor() {
+  processor_ = false;
+  clear_has_processor();
+}
+inline bool Message_FCWConfig::processor() const {
+  // @@protoc_insertion_point(field_get:ADAS_Debug_Application.Message.FCWConfig.processor)
+  return processor_;
+}
+inline void Message_FCWConfig::set_processor(bool value) {
+  set_has_processor();
+  processor_ = value;
+  // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.processor)
+}
+
+// required bool GrayInit = 3;
+inline bool Message_FCWConfig::has_grayinit() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Message_FCWConfig::set_has_grayinit() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Message_FCWConfig::clear_has_grayinit() {
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void Message_FCWConfig::clear_grayinit() {
   grayinit_ = false;
@@ -1077,15 +1254,15 @@ inline void Message_FCWConfig::set_grayinit(bool value) {
   // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.GrayInit)
 }
 
-// required double HOGscaleInit = 3;
+// required double HOGscaleInit = 4;
 inline bool Message_FCWConfig::has_hogscaleinit() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void Message_FCWConfig::set_has_hogscaleinit() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void Message_FCWConfig::clear_has_hogscaleinit() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void Message_FCWConfig::clear_hogscaleinit() {
   hogscaleinit_ = 0;
@@ -1101,15 +1278,15 @@ inline void Message_FCWConfig::set_hogscaleinit(double value) {
   // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.HOGscaleInit)
 }
 
-// required int32 LevelsCount = 4;
+// required int32 LevelsCount = 5;
 inline bool Message_FCWConfig::has_levelscount() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 inline void Message_FCWConfig::set_has_levelscount() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000010u;
 }
 inline void Message_FCWConfig::clear_has_levelscount() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void Message_FCWConfig::clear_levelscount() {
   levelscount_ = 0;
@@ -1125,15 +1302,15 @@ inline void Message_FCWConfig::set_levelscount(::google::protobuf::int32 value) 
   // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.LevelsCount)
 }
 
-// required int32 HOGgroupThresholdInit = 5;
+// required int32 HOGgroupThresholdInit = 6;
 inline bool Message_FCWConfig::has_hoggroupthresholdinit() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
 inline void Message_FCWConfig::set_has_hoggroupthresholdinit() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000020u;
 }
 inline void Message_FCWConfig::clear_has_hoggroupthresholdinit() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline void Message_FCWConfig::clear_hoggroupthresholdinit() {
   hoggroupthresholdinit_ = 0;
@@ -1149,15 +1326,15 @@ inline void Message_FCWConfig::set_hoggroupthresholdinit(::google::protobuf::int
   // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.HOGgroupThresholdInit)
 }
 
-// required double HitThreshold = 6;
+// required double HitThreshold = 7;
 inline bool Message_FCWConfig::has_hitthreshold() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000040u) != 0;
 }
 inline void Message_FCWConfig::set_has_hitthreshold() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000040u;
 }
 inline void Message_FCWConfig::clear_has_hitthreshold() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000040u;
 }
 inline void Message_FCWConfig::clear_hitthreshold() {
   hitthreshold_ = 0;
@@ -1173,52 +1350,226 @@ inline void Message_FCWConfig::set_hitthreshold(double value) {
   // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.HitThreshold)
 }
 
-// optional bool headless = 7;
-inline bool Message_FCWConfig::has_headless() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
-}
-inline void Message_FCWConfig::set_has_headless() {
-  _has_bits_[0] |= 0x00000040u;
-}
-inline void Message_FCWConfig::clear_has_headless() {
-  _has_bits_[0] &= ~0x00000040u;
-}
-inline void Message_FCWConfig::clear_headless() {
-  headless_ = false;
-  clear_has_headless();
-}
-inline bool Message_FCWConfig::headless() const {
-  // @@protoc_insertion_point(field_get:ADAS_Debug_Application.Message.FCWConfig.headless)
-  return headless_;
-}
-inline void Message_FCWConfig::set_headless(bool value) {
-  set_has_headless();
-  headless_ = value;
-  // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.headless)
-}
-
-// optional bool WriteFile = 8;
-inline bool Message_FCWConfig::has_writefile() const {
+// optional .ADAS_Debug_Application.Message.CustomField custom = 8;
+inline bool Message_FCWConfig::has_custom() const {
   return (_has_bits_[0] & 0x00000080u) != 0;
 }
-inline void Message_FCWConfig::set_has_writefile() {
+inline void Message_FCWConfig::set_has_custom() {
   _has_bits_[0] |= 0x00000080u;
 }
-inline void Message_FCWConfig::clear_has_writefile() {
+inline void Message_FCWConfig::clear_has_custom() {
   _has_bits_[0] &= ~0x00000080u;
 }
-inline void Message_FCWConfig::clear_writefile() {
-  writefile_ = false;
-  clear_has_writefile();
+inline void Message_FCWConfig::clear_custom() {
+  if (custom_ != NULL) custom_->::ADAS_Debug_Application::Message_CustomField::Clear();
+  clear_has_custom();
 }
-inline bool Message_FCWConfig::writefile() const {
-  // @@protoc_insertion_point(field_get:ADAS_Debug_Application.Message.FCWConfig.WriteFile)
-  return writefile_;
+inline const ::ADAS_Debug_Application::Message_CustomField& Message_FCWConfig::custom() const {
+  // @@protoc_insertion_point(field_get:ADAS_Debug_Application.Message.FCWConfig.custom)
+  return custom_ != NULL ? *custom_ : *default_instance_->custom_;
 }
-inline void Message_FCWConfig::set_writefile(bool value) {
-  set_has_writefile();
-  writefile_ = value;
-  // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.WriteFile)
+inline ::ADAS_Debug_Application::Message_CustomField* Message_FCWConfig::mutable_custom() {
+  set_has_custom();
+  if (custom_ == NULL) custom_ = new ::ADAS_Debug_Application::Message_CustomField;
+  // @@protoc_insertion_point(field_mutable:ADAS_Debug_Application.Message.FCWConfig.custom)
+  return custom_;
+}
+inline ::ADAS_Debug_Application::Message_CustomField* Message_FCWConfig::release_custom() {
+  clear_has_custom();
+  ::ADAS_Debug_Application::Message_CustomField* temp = custom_;
+  custom_ = NULL;
+  return temp;
+}
+inline void Message_FCWConfig::set_allocated_custom(::ADAS_Debug_Application::Message_CustomField* custom) {
+  delete custom_;
+  custom_ = custom;
+  if (custom) {
+    set_has_custom();
+  } else {
+    clear_has_custom();
+  }
+  // @@protoc_insertion_point(field_set_allocated:ADAS_Debug_Application.Message.FCWConfig.custom)
+}
+
+// -------------------------------------------------------------------
+
+// Message_CustomField
+
+// required string name = 1;
+inline bool Message_CustomField::has_name() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void Message_CustomField::set_has_name() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void Message_CustomField::clear_has_name() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void Message_CustomField::clear_name() {
+  if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    name_->clear();
+  }
+  clear_has_name();
+}
+inline const ::std::string& Message_CustomField::name() const {
+  // @@protoc_insertion_point(field_get:ADAS_Debug_Application.Message.CustomField.name)
+  return *name_;
+}
+inline void Message_CustomField::set_name(const ::std::string& value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    name_ = new ::std::string;
+  }
+  name_->assign(value);
+  // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.CustomField.name)
+}
+inline void Message_CustomField::set_name(const char* value) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    name_ = new ::std::string;
+  }
+  name_->assign(value);
+  // @@protoc_insertion_point(field_set_char:ADAS_Debug_Application.Message.CustomField.name)
+}
+inline void Message_CustomField::set_name(const char* value, size_t size) {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    name_ = new ::std::string;
+  }
+  name_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:ADAS_Debug_Application.Message.CustomField.name)
+}
+inline ::std::string* Message_CustomField::mutable_name() {
+  set_has_name();
+  if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    name_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:ADAS_Debug_Application.Message.CustomField.name)
+  return name_;
+}
+inline ::std::string* Message_CustomField::release_name() {
+  clear_has_name();
+  if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = name_;
+    name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void Message_CustomField::set_allocated_name(::std::string* name) {
+  if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete name_;
+  }
+  if (name) {
+    set_has_name();
+    name_ = name;
+  } else {
+    clear_has_name();
+    name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:ADAS_Debug_Application.Message.CustomField.name)
+}
+
+// required .ADAS_Debug_Application.Type type = 2;
+inline bool Message_CustomField::has_type() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Message_CustomField::set_has_type() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Message_CustomField::clear_has_type() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Message_CustomField::clear_type() {
+  type_ = 0;
+  clear_has_type();
+}
+inline ::ADAS_Debug_Application::Type Message_CustomField::type() const {
+  // @@protoc_insertion_point(field_get:ADAS_Debug_Application.Message.CustomField.type)
+  return static_cast< ::ADAS_Debug_Application::Type >(type_);
+}
+inline void Message_CustomField::set_type(::ADAS_Debug_Application::Type value) {
+  assert(::ADAS_Debug_Application::Type_IsValid(value));
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.CustomField.type)
+}
+
+// required string value = 3;
+inline bool Message_CustomField::has_value() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Message_CustomField::set_has_value() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Message_CustomField::clear_has_value() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Message_CustomField::clear_value() {
+  if (value_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    value_->clear();
+  }
+  clear_has_value();
+}
+inline const ::std::string& Message_CustomField::value() const {
+  // @@protoc_insertion_point(field_get:ADAS_Debug_Application.Message.CustomField.value)
+  return *value_;
+}
+inline void Message_CustomField::set_value(const ::std::string& value) {
+  set_has_value();
+  if (value_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    value_ = new ::std::string;
+  }
+  value_->assign(value);
+  // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.CustomField.value)
+}
+inline void Message_CustomField::set_value(const char* value) {
+  set_has_value();
+  if (value_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    value_ = new ::std::string;
+  }
+  value_->assign(value);
+  // @@protoc_insertion_point(field_set_char:ADAS_Debug_Application.Message.CustomField.value)
+}
+inline void Message_CustomField::set_value(const char* value, size_t size) {
+  set_has_value();
+  if (value_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    value_ = new ::std::string;
+  }
+  value_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:ADAS_Debug_Application.Message.CustomField.value)
+}
+inline ::std::string* Message_CustomField::mutable_value() {
+  set_has_value();
+  if (value_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    value_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:ADAS_Debug_Application.Message.CustomField.value)
+  return value_;
+}
+inline ::std::string* Message_CustomField::release_value() {
+  clear_has_value();
+  if (value_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = value_;
+    value_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void Message_CustomField::set_allocated_value(::std::string* value) {
+  if (value_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete value_;
+  }
+  if (value) {
+    set_has_value();
+    value_ = value;
+  } else {
+    clear_has_value();
+    value_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:ADAS_Debug_Application.Message.CustomField.value)
 }
 
 // -------------------------------------------------------------------
@@ -1401,6 +1752,11 @@ template <> struct is_proto_enum< ::ADAS_Debug_Application::Source> : ::google::
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::ADAS_Debug_Application::Source>() {
   return ::ADAS_Debug_Application::Source_descriptor();
+}
+template <> struct is_proto_enum< ::ADAS_Debug_Application::Type> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::ADAS_Debug_Application::Type>() {
+  return ::ADAS_Debug_Application::Type_descriptor();
 }
 
 }  // namespace google

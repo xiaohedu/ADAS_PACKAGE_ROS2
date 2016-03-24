@@ -32,10 +32,14 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* Message_FCWConfig_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Message_FCWConfig_reflection_ = NULL;
+const ::google::protobuf::Descriptor* Message_CustomField_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  Message_CustomField_reflection_ = NULL;
 const ::google::protobuf::EnumDescriptor* MessageType_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* State_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* Stream_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* Source_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* Type_descriptor_ = NULL;
 
 }  // namespace
 
@@ -88,9 +92,9 @@ void protobuf_AssignDesc_adasdebugapplication_2eproto() {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_LDWConfig, lane_detector_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_LDWConfig, yaw_angle_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_LDWConfig, pitch_angle_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_LDWConfig, alpha_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_LDWConfig, filters_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_LDWConfig, coef_thetamax_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_LDWConfig, detection_combination_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_LDWConfig, custom_),
   };
   Message_LDWConfig_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -106,13 +110,13 @@ void protobuf_AssignDesc_adasdebugapplication_2eproto() {
   Message_FCWConfig_descriptor_ = Message_descriptor_->nested_type(2);
   static const int Message_FCWConfig_offsets_[8] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_FCWConfig, car_detector_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_FCWConfig, processor_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_FCWConfig, grayinit_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_FCWConfig, hogscaleinit_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_FCWConfig, levelscount_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_FCWConfig, hoggroupthresholdinit_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_FCWConfig, hitthreshold_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_FCWConfig, headless_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_FCWConfig, writefile_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_FCWConfig, custom_),
   };
   Message_FCWConfig_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -125,10 +129,28 @@ void protobuf_AssignDesc_adasdebugapplication_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Message_FCWConfig));
+  Message_CustomField_descriptor_ = Message_descriptor_->nested_type(3);
+  static const int Message_CustomField_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_CustomField, name_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_CustomField, type_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_CustomField, value_),
+  };
+  Message_CustomField_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      Message_CustomField_descriptor_,
+      Message_CustomField::default_instance_,
+      Message_CustomField_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_CustomField, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_CustomField, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(Message_CustomField));
   MessageType_descriptor_ = file->enum_type(0);
   State_descriptor_ = file->enum_type(1);
   Stream_descriptor_ = file->enum_type(2);
   Source_descriptor_ = file->enum_type(3);
+  Type_descriptor_ = file->enum_type(4);
 }
 
 namespace {
@@ -149,6 +171,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
     Message_LDWConfig_descriptor_, &Message_LDWConfig::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Message_FCWConfig_descriptor_, &Message_FCWConfig::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    Message_CustomField_descriptor_, &Message_CustomField::default_instance());
 }
 
 }  // namespace
@@ -162,6 +186,8 @@ void protobuf_ShutdownFile_adasdebugapplication_2eproto() {
   delete Message_LDWConfig_reflection_;
   delete Message_FCWConfig::default_instance_;
   delete Message_FCWConfig_reflection_;
+  delete Message_CustomField::default_instance_;
+  delete Message_CustomField_reflection_;
 }
 
 void protobuf_AddDesc_adasdebugapplication_2eproto() {
@@ -172,7 +198,7 @@ void protobuf_AddDesc_adasdebugapplication_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\032adasdebugapplication.proto\022\026ADAS_Debug"
-    "_Application\"\250\006\n\007Message\0228\n\013messagetype\030"
+    "_Application\"\337\007\n\007Message\0228\n\013messagetype\030"
     "\001 \002(\0162#.ADAS_Debug_Application.MessageTy"
     "pe\022G\n\017pipeline_config\030\002 \001(\0132..ADAS_Debug"
     "_Application.Message.PipelineConfig\022=\n\nl"
@@ -184,31 +210,39 @@ void protobuf_AddDesc_adasdebugapplication_2eproto() {
     ":\006CAMERA\022\025\n\rsource_folder\030\003 \002(\t\0222\n\005state"
     "\030\004 \002(\0162\035.ADAS_Debug_Application.State:\004S"
     "TOP\0223\n\006stream\030\005 \002(\0162\036.ADAS_Debug_Applica"
-    "tion.Stream:\003LDW\032\211\001\n\tLDWConfig\022\025\n\rlane_d"
+    "tion.Stream:\003LDW\032\275\001\n\tLDWConfig\022\025\n\rlane_d"
     "etector\030\001 \002(\010\022\021\n\tyaw_angle\030\002 \002(\001\022\023\n\013pitc"
-    "h_angle\030\003 \002(\001\022\r\n\005alpha\030\004 \001(\001\022\017\n\007filters\030"
-    "\005 \001(\005\022\035\n\025detection_combination\030\006 \001(\005\032\270\001\n"
-    "\tFCWConfig\022\024\n\014car_detector\030\001 \002(\010\022\020\n\010Gray"
-    "Init\030\002 \002(\010\022\024\n\014HOGscaleInit\030\003 \002(\001\022\023\n\013Leve"
-    "lsCount\030\004 \002(\005\022\035\n\025HOGgroupThresholdInit\030\005"
-    " \002(\005\022\024\n\014HitThreshold\030\006 \002(\001\022\020\n\010headless\030\007"
-    " \001(\010\022\021\n\tWriteFile\030\010 \001(\010*B\n\013MessageType\022\023"
-    "\n\017PipeLine_Config\020\000\022\016\n\nLDW_Config\020\001\022\016\n\nF"
-    "CW_Config\020\002*&\n\005State\022\010\n\004PLAY\020\000\022\010\n\004STOP\020\001"
-    "\022\t\n\005PAUSE\020\002*\032\n\006Stream\022\007\n\003LDW\020\000\022\007\n\003FCW\020\001*"
-    " \n\006Source\022\n\n\006CAMERA\020\000\022\n\n\006FOLDER\020\001B8\n com"
-    ".gst_sdk_tutorials.tutorial_5B\024AdasDebug"
-    "Application", 1091);
+    "h_angle\030\003 \002(\001\022\025\n\rCoef_thetaMax\030\004 \001(\001\022\035\n\025"
+    "detection_combination\030\005 \001(\005\022;\n\006custom\030\006 "
+    "\001(\0132+.ADAS_Debug_Application.Message.Cus"
+    "tomField\032\343\001\n\tFCWConfig\022\024\n\014car_detector\030\001"
+    " \002(\010\022\021\n\tprocessor\030\002 \002(\010\022\020\n\010GrayInit\030\003 \002("
+    "\010\022\024\n\014HOGscaleInit\030\004 \002(\001\022\023\n\013LevelsCount\030\005"
+    " \002(\005\022\035\n\025HOGgroupThresholdInit\030\006 \002(\005\022\024\n\014H"
+    "itThreshold\030\007 \002(\001\022;\n\006custom\030\010 \001(\0132+.ADAS"
+    "_Debug_Application.Message.CustomField\032V"
+    "\n\013CustomField\022\014\n\004name\030\001 \002(\t\022*\n\004type\030\002 \002("
+    "\0162\034.ADAS_Debug_Application.Type\022\r\n\005value"
+    "\030\003 \002(\t*B\n\013MessageType\022\023\n\017PipeLine_Config"
+    "\020\000\022\016\n\nLDW_Config\020\001\022\016\n\nFCW_Config\020\002*&\n\005St"
+    "ate\022\010\n\004PLAY\020\000\022\010\n\004STOP\020\001\022\t\n\005PAUSE\020\002*\032\n\006St"
+    "ream\022\007\n\003LDW\020\000\022\007\n\003FCW\020\001* \n\006Source\022\n\n\006CAME"
+    "RA\020\000\022\n\n\006FOLDER\020\001*4\n\004Type\022\007\n\003Int\020\000\022\n\n\006Dou"
+    "ble\020\001\022\n\n\006String\020\002\022\013\n\007Boolean\020\003B8\n com.gs"
+    "t_sdk_tutorials.tutorial_5B\024AdasDebugApp"
+    "lication", 1328);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "adasdebugapplication.proto", &protobuf_RegisterTypes);
   Message::default_instance_ = new Message();
   Message_PipelineConfig::default_instance_ = new Message_PipelineConfig();
   Message_LDWConfig::default_instance_ = new Message_LDWConfig();
   Message_FCWConfig::default_instance_ = new Message_FCWConfig();
+  Message_CustomField::default_instance_ = new Message_CustomField();
   Message::default_instance_->InitAsDefaultInstance();
   Message_PipelineConfig::default_instance_->InitAsDefaultInstance();
   Message_LDWConfig::default_instance_->InitAsDefaultInstance();
   Message_FCWConfig::default_instance_->InitAsDefaultInstance();
+  Message_CustomField::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_adasdebugapplication_2eproto);
 }
 
@@ -270,6 +304,22 @@ bool Source_IsValid(int value) {
   switch(value) {
     case 0:
     case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::google::protobuf::EnumDescriptor* Type_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return Type_descriptor_;
+}
+bool Type_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
       return true;
     default:
       return false;
@@ -723,9 +773,9 @@ void Message_PipelineConfig::Swap(Message_PipelineConfig* other) {
 const int Message_LDWConfig::kLaneDetectorFieldNumber;
 const int Message_LDWConfig::kYawAngleFieldNumber;
 const int Message_LDWConfig::kPitchAngleFieldNumber;
-const int Message_LDWConfig::kAlphaFieldNumber;
-const int Message_LDWConfig::kFiltersFieldNumber;
+const int Message_LDWConfig::kCoefThetaMaxFieldNumber;
 const int Message_LDWConfig::kDetectionCombinationFieldNumber;
+const int Message_LDWConfig::kCustomFieldNumber;
 #endif  // !_MSC_VER
 
 Message_LDWConfig::Message_LDWConfig()
@@ -735,6 +785,7 @@ Message_LDWConfig::Message_LDWConfig()
 }
 
 void Message_LDWConfig::InitAsDefaultInstance() {
+  custom_ = const_cast< ::ADAS_Debug_Application::Message_CustomField*>(&::ADAS_Debug_Application::Message_CustomField::default_instance());
 }
 
 Message_LDWConfig::Message_LDWConfig(const Message_LDWConfig& from)
@@ -749,9 +800,9 @@ void Message_LDWConfig::SharedCtor() {
   lane_detector_ = false;
   yaw_angle_ = 0;
   pitch_angle_ = 0;
-  alpha_ = 0;
-  filters_ = 0;
+  coef_thetamax_ = 0;
   detection_combination_ = 0;
+  custom_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -762,6 +813,7 @@ Message_LDWConfig::~Message_LDWConfig() {
 
 void Message_LDWConfig::SharedDtor() {
   if (this != default_instance_) {
+    delete custom_;
   }
 }
 
@@ -798,7 +850,10 @@ void Message_LDWConfig::Clear() {
   } while (0)
 
   if (_has_bits_[0 / 32] & 63) {
-    ZR_(yaw_angle_, detection_combination_);
+    ZR_(yaw_angle_, coef_thetamax_);
+    if (has_custom()) {
+      if (custom_ != NULL) custom_->::ADAS_Debug_Application::Message_CustomField::Clear();
+    }
   }
 
 #undef OFFSET_OF_FIELD_
@@ -858,48 +913,46 @@ bool Message_LDWConfig::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(33)) goto parse_alpha;
+        if (input->ExpectTag(33)) goto parse_Coef_thetaMax;
         break;
       }
 
-      // optional double alpha = 4;
+      // optional double Coef_thetaMax = 4;
       case 4: {
         if (tag == 33) {
-         parse_alpha:
+         parse_Coef_thetaMax:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
-                 input, &alpha_)));
-          set_has_alpha();
+                 input, &coef_thetamax_)));
+          set_has_coef_thetamax();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(40)) goto parse_filters;
+        if (input->ExpectTag(40)) goto parse_detection_combination;
         break;
       }
 
-      // optional int32 filters = 5;
+      // optional int32 detection_combination = 5;
       case 5: {
         if (tag == 40) {
-         parse_filters:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &filters_)));
-          set_has_filters();
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(48)) goto parse_detection_combination;
-        break;
-      }
-
-      // optional int32 detection_combination = 6;
-      case 6: {
-        if (tag == 48) {
          parse_detection_combination:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &detection_combination_)));
           set_has_detection_combination();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(50)) goto parse_custom;
+        break;
+      }
+
+      // optional .ADAS_Debug_Application.Message.CustomField custom = 6;
+      case 6: {
+        if (tag == 50) {
+         parse_custom:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_custom()));
         } else {
           goto handle_unusual;
         }
@@ -947,19 +1000,20 @@ void Message_LDWConfig::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteDouble(3, this->pitch_angle(), output);
   }
 
-  // optional double alpha = 4;
-  if (has_alpha()) {
-    ::google::protobuf::internal::WireFormatLite::WriteDouble(4, this->alpha(), output);
+  // optional double Coef_thetaMax = 4;
+  if (has_coef_thetamax()) {
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(4, this->coef_thetamax(), output);
   }
 
-  // optional int32 filters = 5;
-  if (has_filters()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->filters(), output);
-  }
-
-  // optional int32 detection_combination = 6;
+  // optional int32 detection_combination = 5;
   if (has_detection_combination()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(6, this->detection_combination(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->detection_combination(), output);
+  }
+
+  // optional .ADAS_Debug_Application.Message.CustomField custom = 6;
+  if (has_custom()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      6, this->custom(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -987,19 +1041,21 @@ void Message_LDWConfig::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(3, this->pitch_angle(), target);
   }
 
-  // optional double alpha = 4;
-  if (has_alpha()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(4, this->alpha(), target);
+  // optional double Coef_thetaMax = 4;
+  if (has_coef_thetamax()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(4, this->coef_thetamax(), target);
   }
 
-  // optional int32 filters = 5;
-  if (has_filters()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->filters(), target);
-  }
-
-  // optional int32 detection_combination = 6;
+  // optional int32 detection_combination = 5;
   if (has_detection_combination()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(6, this->detection_combination(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->detection_combination(), target);
+  }
+
+  // optional .ADAS_Debug_Application.Message.CustomField custom = 6;
+  if (has_custom()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        6, this->custom(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -1029,23 +1085,23 @@ int Message_LDWConfig::ByteSize() const {
       total_size += 1 + 8;
     }
 
-    // optional double alpha = 4;
-    if (has_alpha()) {
+    // optional double Coef_thetaMax = 4;
+    if (has_coef_thetamax()) {
       total_size += 1 + 8;
     }
 
-    // optional int32 filters = 5;
-    if (has_filters()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
-          this->filters());
-    }
-
-    // optional int32 detection_combination = 6;
+    // optional int32 detection_combination = 5;
     if (has_detection_combination()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->detection_combination());
+    }
+
+    // optional .ADAS_Debug_Application.Message.CustomField custom = 6;
+    if (has_custom()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->custom());
     }
 
   }
@@ -1084,14 +1140,14 @@ void Message_LDWConfig::MergeFrom(const Message_LDWConfig& from) {
     if (from.has_pitch_angle()) {
       set_pitch_angle(from.pitch_angle());
     }
-    if (from.has_alpha()) {
-      set_alpha(from.alpha());
-    }
-    if (from.has_filters()) {
-      set_filters(from.filters());
+    if (from.has_coef_thetamax()) {
+      set_coef_thetamax(from.coef_thetamax());
     }
     if (from.has_detection_combination()) {
       set_detection_combination(from.detection_combination());
+    }
+    if (from.has_custom()) {
+      mutable_custom()->::ADAS_Debug_Application::Message_CustomField::MergeFrom(from.custom());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -1112,6 +1168,9 @@ void Message_LDWConfig::CopyFrom(const Message_LDWConfig& from) {
 bool Message_LDWConfig::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
 
+  if (has_custom()) {
+    if (!this->custom().IsInitialized()) return false;
+  }
   return true;
 }
 
@@ -1120,9 +1179,9 @@ void Message_LDWConfig::Swap(Message_LDWConfig* other) {
     std::swap(lane_detector_, other->lane_detector_);
     std::swap(yaw_angle_, other->yaw_angle_);
     std::swap(pitch_angle_, other->pitch_angle_);
-    std::swap(alpha_, other->alpha_);
-    std::swap(filters_, other->filters_);
+    std::swap(coef_thetamax_, other->coef_thetamax_);
     std::swap(detection_combination_, other->detection_combination_);
+    std::swap(custom_, other->custom_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -1142,13 +1201,13 @@ void Message_LDWConfig::Swap(Message_LDWConfig* other) {
 
 #ifndef _MSC_VER
 const int Message_FCWConfig::kCarDetectorFieldNumber;
+const int Message_FCWConfig::kProcessorFieldNumber;
 const int Message_FCWConfig::kGrayInitFieldNumber;
 const int Message_FCWConfig::kHOGscaleInitFieldNumber;
 const int Message_FCWConfig::kLevelsCountFieldNumber;
 const int Message_FCWConfig::kHOGgroupThresholdInitFieldNumber;
 const int Message_FCWConfig::kHitThresholdFieldNumber;
-const int Message_FCWConfig::kHeadlessFieldNumber;
-const int Message_FCWConfig::kWriteFileFieldNumber;
+const int Message_FCWConfig::kCustomFieldNumber;
 #endif  // !_MSC_VER
 
 Message_FCWConfig::Message_FCWConfig()
@@ -1158,6 +1217,7 @@ Message_FCWConfig::Message_FCWConfig()
 }
 
 void Message_FCWConfig::InitAsDefaultInstance() {
+  custom_ = const_cast< ::ADAS_Debug_Application::Message_CustomField*>(&::ADAS_Debug_Application::Message_CustomField::default_instance());
 }
 
 Message_FCWConfig::Message_FCWConfig(const Message_FCWConfig& from)
@@ -1170,13 +1230,13 @@ Message_FCWConfig::Message_FCWConfig(const Message_FCWConfig& from)
 void Message_FCWConfig::SharedCtor() {
   _cached_size_ = 0;
   car_detector_ = false;
+  processor_ = false;
   grayinit_ = false;
   hogscaleinit_ = 0;
   levelscount_ = 0;
   hoggroupthresholdinit_ = 0;
   hitthreshold_ = 0;
-  headless_ = false;
-  writefile_ = false;
+  custom_ = NULL;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1187,6 +1247,7 @@ Message_FCWConfig::~Message_FCWConfig() {
 
 void Message_FCWConfig::SharedDtor() {
   if (this != default_instance_) {
+    delete custom_;
   }
 }
 
@@ -1223,7 +1284,11 @@ void Message_FCWConfig::Clear() {
   } while (0)
 
   if (_has_bits_[0 / 32] & 255) {
-    ZR_(hogscaleinit_, hoggroupthresholdinit_);
+    ZR_(car_detector_, hitthreshold_);
+    hoggroupthresholdinit_ = 0;
+    if (has_custom()) {
+      if (custom_ != NULL) custom_->::ADAS_Debug_Application::Message_CustomField::Clear();
+    }
   }
 
 #undef OFFSET_OF_FIELD_
@@ -1253,13 +1318,28 @@ bool Message_FCWConfig::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_GrayInit;
+        if (input->ExpectTag(16)) goto parse_processor;
         break;
       }
 
-      // required bool GrayInit = 2;
+      // required bool processor = 2;
       case 2: {
         if (tag == 16) {
+         parse_processor:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &processor_)));
+          set_has_processor();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_GrayInit;
+        break;
+      }
+
+      // required bool GrayInit = 3;
+      case 3: {
+        if (tag == 24) {
          parse_GrayInit:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -1268,13 +1348,13 @@ bool Message_FCWConfig::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(25)) goto parse_HOGscaleInit;
+        if (input->ExpectTag(33)) goto parse_HOGscaleInit;
         break;
       }
 
-      // required double HOGscaleInit = 3;
-      case 3: {
-        if (tag == 25) {
+      // required double HOGscaleInit = 4;
+      case 4: {
+        if (tag == 33) {
          parse_HOGscaleInit:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
@@ -1283,13 +1363,13 @@ bool Message_FCWConfig::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(32)) goto parse_LevelsCount;
+        if (input->ExpectTag(40)) goto parse_LevelsCount;
         break;
       }
 
-      // required int32 LevelsCount = 4;
-      case 4: {
-        if (tag == 32) {
+      // required int32 LevelsCount = 5;
+      case 5: {
+        if (tag == 40) {
          parse_LevelsCount:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -1298,13 +1378,13 @@ bool Message_FCWConfig::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(40)) goto parse_HOGgroupThresholdInit;
+        if (input->ExpectTag(48)) goto parse_HOGgroupThresholdInit;
         break;
       }
 
-      // required int32 HOGgroupThresholdInit = 5;
-      case 5: {
-        if (tag == 40) {
+      // required int32 HOGgroupThresholdInit = 6;
+      case 6: {
+        if (tag == 48) {
          parse_HOGgroupThresholdInit:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -1313,13 +1393,13 @@ bool Message_FCWConfig::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(49)) goto parse_HitThreshold;
+        if (input->ExpectTag(57)) goto parse_HitThreshold;
         break;
       }
 
-      // required double HitThreshold = 6;
-      case 6: {
-        if (tag == 49) {
+      // required double HitThreshold = 7;
+      case 7: {
+        if (tag == 57) {
          parse_HitThreshold:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
@@ -1328,33 +1408,16 @@ bool Message_FCWConfig::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(56)) goto parse_headless;
+        if (input->ExpectTag(66)) goto parse_custom;
         break;
       }
 
-      // optional bool headless = 7;
-      case 7: {
-        if (tag == 56) {
-         parse_headless:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &headless_)));
-          set_has_headless();
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(64)) goto parse_WriteFile;
-        break;
-      }
-
-      // optional bool WriteFile = 8;
+      // optional .ADAS_Debug_Application.Message.CustomField custom = 8;
       case 8: {
-        if (tag == 64) {
-         parse_WriteFile:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &writefile_)));
-          set_has_writefile();
+        if (tag == 66) {
+         parse_custom:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_custom()));
         } else {
           goto handle_unusual;
         }
@@ -1392,39 +1455,40 @@ void Message_FCWConfig::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->car_detector(), output);
   }
 
-  // required bool GrayInit = 2;
+  // required bool processor = 2;
+  if (has_processor()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->processor(), output);
+  }
+
+  // required bool GrayInit = 3;
   if (has_grayinit()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->grayinit(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->grayinit(), output);
   }
 
-  // required double HOGscaleInit = 3;
+  // required double HOGscaleInit = 4;
   if (has_hogscaleinit()) {
-    ::google::protobuf::internal::WireFormatLite::WriteDouble(3, this->hogscaleinit(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(4, this->hogscaleinit(), output);
   }
 
-  // required int32 LevelsCount = 4;
+  // required int32 LevelsCount = 5;
   if (has_levelscount()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->levelscount(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->levelscount(), output);
   }
 
-  // required int32 HOGgroupThresholdInit = 5;
+  // required int32 HOGgroupThresholdInit = 6;
   if (has_hoggroupthresholdinit()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->hoggroupthresholdinit(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(6, this->hoggroupthresholdinit(), output);
   }
 
-  // required double HitThreshold = 6;
+  // required double HitThreshold = 7;
   if (has_hitthreshold()) {
-    ::google::protobuf::internal::WireFormatLite::WriteDouble(6, this->hitthreshold(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(7, this->hitthreshold(), output);
   }
 
-  // optional bool headless = 7;
-  if (has_headless()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(7, this->headless(), output);
-  }
-
-  // optional bool WriteFile = 8;
-  if (has_writefile()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(8, this->writefile(), output);
+  // optional .ADAS_Debug_Application.Message.CustomField custom = 8;
+  if (has_custom()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      8, this->custom(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -1442,39 +1506,41 @@ void Message_FCWConfig::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(1, this->car_detector(), target);
   }
 
-  // required bool GrayInit = 2;
+  // required bool processor = 2;
+  if (has_processor()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(2, this->processor(), target);
+  }
+
+  // required bool GrayInit = 3;
   if (has_grayinit()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(2, this->grayinit(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->grayinit(), target);
   }
 
-  // required double HOGscaleInit = 3;
+  // required double HOGscaleInit = 4;
   if (has_hogscaleinit()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(3, this->hogscaleinit(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(4, this->hogscaleinit(), target);
   }
 
-  // required int32 LevelsCount = 4;
+  // required int32 LevelsCount = 5;
   if (has_levelscount()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->levelscount(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->levelscount(), target);
   }
 
-  // required int32 HOGgroupThresholdInit = 5;
+  // required int32 HOGgroupThresholdInit = 6;
   if (has_hoggroupthresholdinit()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->hoggroupthresholdinit(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(6, this->hoggroupthresholdinit(), target);
   }
 
-  // required double HitThreshold = 6;
+  // required double HitThreshold = 7;
   if (has_hitthreshold()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(6, this->hitthreshold(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(7, this->hitthreshold(), target);
   }
 
-  // optional bool headless = 7;
-  if (has_headless()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(7, this->headless(), target);
-  }
-
-  // optional bool WriteFile = 8;
-  if (has_writefile()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(8, this->writefile(), target);
+  // optional .ADAS_Debug_Application.Message.CustomField custom = 8;
+  if (has_custom()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        8, this->custom(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -1494,43 +1560,45 @@ int Message_FCWConfig::ByteSize() const {
       total_size += 1 + 1;
     }
 
-    // required bool GrayInit = 2;
+    // required bool processor = 2;
+    if (has_processor()) {
+      total_size += 1 + 1;
+    }
+
+    // required bool GrayInit = 3;
     if (has_grayinit()) {
       total_size += 1 + 1;
     }
 
-    // required double HOGscaleInit = 3;
+    // required double HOGscaleInit = 4;
     if (has_hogscaleinit()) {
       total_size += 1 + 8;
     }
 
-    // required int32 LevelsCount = 4;
+    // required int32 LevelsCount = 5;
     if (has_levelscount()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->levelscount());
     }
 
-    // required int32 HOGgroupThresholdInit = 5;
+    // required int32 HOGgroupThresholdInit = 6;
     if (has_hoggroupthresholdinit()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->hoggroupthresholdinit());
     }
 
-    // required double HitThreshold = 6;
+    // required double HitThreshold = 7;
     if (has_hitthreshold()) {
       total_size += 1 + 8;
     }
 
-    // optional bool headless = 7;
-    if (has_headless()) {
-      total_size += 1 + 1;
-    }
-
-    // optional bool WriteFile = 8;
-    if (has_writefile()) {
-      total_size += 1 + 1;
+    // optional .ADAS_Debug_Application.Message.CustomField custom = 8;
+    if (has_custom()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+          this->custom());
     }
 
   }
@@ -1563,6 +1631,9 @@ void Message_FCWConfig::MergeFrom(const Message_FCWConfig& from) {
     if (from.has_car_detector()) {
       set_car_detector(from.car_detector());
     }
+    if (from.has_processor()) {
+      set_processor(from.processor());
+    }
     if (from.has_grayinit()) {
       set_grayinit(from.grayinit());
     }
@@ -1578,11 +1649,8 @@ void Message_FCWConfig::MergeFrom(const Message_FCWConfig& from) {
     if (from.has_hitthreshold()) {
       set_hitthreshold(from.hitthreshold());
     }
-    if (from.has_headless()) {
-      set_headless(from.headless());
-    }
-    if (from.has_writefile()) {
-      set_writefile(from.writefile());
+    if (from.has_custom()) {
+      mutable_custom()->::ADAS_Debug_Application::Message_CustomField::MergeFrom(from.custom());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -1601,21 +1669,24 @@ void Message_FCWConfig::CopyFrom(const Message_FCWConfig& from) {
 }
 
 bool Message_FCWConfig::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000003f) != 0x0000003f) return false;
+  if ((_has_bits_[0] & 0x0000007f) != 0x0000007f) return false;
 
+  if (has_custom()) {
+    if (!this->custom().IsInitialized()) return false;
+  }
   return true;
 }
 
 void Message_FCWConfig::Swap(Message_FCWConfig* other) {
   if (other != this) {
     std::swap(car_detector_, other->car_detector_);
+    std::swap(processor_, other->processor_);
     std::swap(grayinit_, other->grayinit_);
     std::swap(hogscaleinit_, other->hogscaleinit_);
     std::swap(levelscount_, other->levelscount_);
     std::swap(hoggroupthresholdinit_, other->hoggroupthresholdinit_);
     std::swap(hitthreshold_, other->hitthreshold_);
-    std::swap(headless_, other->headless_);
-    std::swap(writefile_, other->writefile_);
+    std::swap(custom_, other->custom_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -1627,6 +1698,356 @@ void Message_FCWConfig::Swap(Message_FCWConfig* other) {
   ::google::protobuf::Metadata metadata;
   metadata.descriptor = Message_FCWConfig_descriptor_;
   metadata.reflection = Message_FCWConfig_reflection_;
+  return metadata;
+}
+
+
+// -------------------------------------------------------------------
+
+#ifndef _MSC_VER
+const int Message_CustomField::kNameFieldNumber;
+const int Message_CustomField::kTypeFieldNumber;
+const int Message_CustomField::kValueFieldNumber;
+#endif  // !_MSC_VER
+
+Message_CustomField::Message_CustomField()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:ADAS_Debug_Application.Message.CustomField)
+}
+
+void Message_CustomField::InitAsDefaultInstance() {
+}
+
+Message_CustomField::Message_CustomField(const Message_CustomField& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:ADAS_Debug_Application.Message.CustomField)
+}
+
+void Message_CustomField::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
+  _cached_size_ = 0;
+  name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  type_ = 0;
+  value_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+Message_CustomField::~Message_CustomField() {
+  // @@protoc_insertion_point(destructor:ADAS_Debug_Application.Message.CustomField)
+  SharedDtor();
+}
+
+void Message_CustomField::SharedDtor() {
+  if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete name_;
+  }
+  if (value_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete value_;
+  }
+  if (this != default_instance_) {
+  }
+}
+
+void Message_CustomField::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* Message_CustomField::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return Message_CustomField_descriptor_;
+}
+
+const Message_CustomField& Message_CustomField::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_adasdebugapplication_2eproto();
+  return *default_instance_;
+}
+
+Message_CustomField* Message_CustomField::default_instance_ = NULL;
+
+Message_CustomField* Message_CustomField::New() const {
+  return new Message_CustomField;
+}
+
+void Message_CustomField::Clear() {
+  if (_has_bits_[0 / 32] & 7) {
+    if (has_name()) {
+      if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        name_->clear();
+      }
+    }
+    type_ = 0;
+    if (has_value()) {
+      if (value_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        value_->clear();
+      }
+    }
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool Message_CustomField::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:ADAS_Debug_Application.Message.CustomField)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required string name = 1;
+      case 1: {
+        if (tag == 10) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_name()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->name().data(), this->name().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "name");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_type;
+        break;
+      }
+
+      // required .ADAS_Debug_Application.Type type = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_type:
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::ADAS_Debug_Application::Type_IsValid(value)) {
+            set_type(static_cast< ::ADAS_Debug_Application::Type >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(2, value);
+          }
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_value;
+        break;
+      }
+
+      // required string value = 3;
+      case 3: {
+        if (tag == 26) {
+         parse_value:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_value()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->value().data(), this->value().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "value");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:ADAS_Debug_Application.Message.CustomField)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:ADAS_Debug_Application.Message.CustomField)
+  return false;
+#undef DO_
+}
+
+void Message_CustomField::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:ADAS_Debug_Application.Message.CustomField)
+  // required string name = 1;
+  if (has_name()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->name().data(), this->name().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->name(), output);
+  }
+
+  // required .ADAS_Debug_Application.Type type = 2;
+  if (has_type()) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      2, this->type(), output);
+  }
+
+  // required string value = 3;
+  if (has_value()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->value().data(), this->value().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "value");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->value(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:ADAS_Debug_Application.Message.CustomField)
+}
+
+::google::protobuf::uint8* Message_CustomField::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:ADAS_Debug_Application.Message.CustomField)
+  // required string name = 1;
+  if (has_name()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->name().data(), this->name().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "name");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->name(), target);
+  }
+
+  // required .ADAS_Debug_Application.Type type = 2;
+  if (has_type()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      2, this->type(), target);
+  }
+
+  // required string value = 3;
+  if (has_value()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->value().data(), this->value().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "value");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        3, this->value(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:ADAS_Debug_Application.Message.CustomField)
+  return target;
+}
+
+int Message_CustomField::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required string name = 1;
+    if (has_name()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->name());
+    }
+
+    // required .ADAS_Debug_Application.Type type = 2;
+    if (has_type()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
+    }
+
+    // required string value = 3;
+    if (has_value()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->value());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Message_CustomField::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const Message_CustomField* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const Message_CustomField*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void Message_CustomField::MergeFrom(const Message_CustomField& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_name()) {
+      set_name(from.name());
+    }
+    if (from.has_type()) {
+      set_type(from.type());
+    }
+    if (from.has_value()) {
+      set_value(from.value());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void Message_CustomField::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Message_CustomField::CopyFrom(const Message_CustomField& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Message_CustomField::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+
+  return true;
+}
+
+void Message_CustomField::Swap(Message_CustomField* other) {
+  if (other != this) {
+    std::swap(name_, other->name_);
+    std::swap(type_, other->type_);
+    std::swap(value_, other->value_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata Message_CustomField::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = Message_CustomField_descriptor_;
+  metadata.reflection = Message_CustomField_reflection_;
   return metadata;
 }
 
