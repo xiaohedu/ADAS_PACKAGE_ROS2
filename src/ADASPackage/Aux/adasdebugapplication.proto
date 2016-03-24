@@ -1,0 +1,73 @@
+
+package ADAS_Debug_Application;
+
+option java_package = "com.gst_sdk_tutorials.tutorial_5";
+option java_outer_classname = "AdasDebugApplication";
+
+
+	enum MessageType
+	 {
+	    PipeLine_Config = 0;
+	    LDW_Config= 1;
+	    FCW_Config = 2;
+	  }
+
+	enum State {
+	    PLAY = 0;
+	    STOP = 1;
+	    PAUSE = 2;
+	  }
+
+	enum Stream {
+	    LDW = 0;
+	    FCW = 1;
+	  }
+
+	enum Source {
+	    CAMERA = 0;
+	    FOLDER = 1;
+	}
+
+
+message Message {
+
+  	required MessageType messagetype = 1;
+
+	message PipelineConfig {
+	  required string IP = 1;
+	  required Source source = 2 [default = CAMERA];
+	  required string source_folder = 3;
+	  required State state = 4 [default = STOP];
+	  required Stream stream = 5 [default = LDW];
+	}
+	
+	optional PipelineConfig pipeline_config = 2;
+  
+
+	message LDWConfig {
+	  required bool lane_detector = 1;
+	  required double yaw_angle = 2;
+	  required double pitch_angle = 3;
+	  optional double alpha = 4;
+	  optional int32 filters = 5;
+	  optional int32 detection_combination = 6;
+
+	}
+	optional LDWConfig ldw_config = 3;
+
+
+	message FCWConfig {
+          required bool car_detector = 1;
+	  required bool GrayInit = 2;
+	  required double HOGscaleInit = 3;
+	  required int32 LevelsCount = 4;
+	  required int32 HOGgroupThresholdInit = 5;
+	  required double HitThreshold = 6;
+	  optional bool headless = 7;
+	  optional bool WriteFile = 8;
+
+	}
+	optional FCWConfig fcw_config = 4;
+
+}
+

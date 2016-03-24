@@ -1,0 +1,222 @@
+
+#ifndef IMAGE_PIPELINE__CAMERA_NODE_HPP_
+#define IMAGE_PIPELINE__CAMERA_NODE_HPP_
+
+#include <chrono>
+#include <ctime>
+#include <sstream>
+#include <string>
+#include <thread>
+#include <memory>
+#include "opencv2/highgui/highgui.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include "sensor_msgs/msg/image.hpp"
+#include "../Aux/common.hpp"
+#include "std_msgs/msg/string.hpp"
+#include "std_msgs/msg/int32.hpp"
+#include "../Aux/adasdebugapplication.pb.h"
+
+
+using namespace std::chrono;
+using namespace ADAS_Debug_Application;
+
+
+struct Source_Parameters
+{
+	Source_Parameters(): inputmode(Source::CAMERA), device(0), SourcePath("cropped/cropped_%d.png"), fps(10), paused(false) {}
+    Source inputmode;
+	int device = 0;
+	std::string SourcePath;
+	double fps;
+	std::atomic<bool> paused;
+};
+
+// Node which captures images from a camera using OpenCV and publishes them.
+// Images are annotated with this process's id as well as the message's ptr.
+class Source_ADAS : public rclcpp::Node
+{
+
+public:
+
+  Source_ADAS(const std::string output_topic, const std::string & node_name = "source_node") : Node(node_name, true)
+
+{
+
+// Create a publisher on the output topic.
+  pub_ = this->create_publisher<sensor_msgs::msg::Image>(output_topic, rmw_qos_profile_sensor_data);
+
+
+
+  // Create a subscription on the input topic which prints on receipt of new messages.
+  ctrlsub_ = this->create_subscription<std_msgs::msg::Int32>("ADAS_command", [this](std_msgs::msg::Int32::UniquePtr msg)
+   {
+
+	  std::cout<<"Recieved message with value: "<<msg->data<<std::endl;
+		  if(msg->data==10)
+			  this->source_.paused.store(true);
+		  if (msg->data==20)
+			  this->source_.paused.store(false);
+		  if (msg->data==30)
+		 			  rclcpp::shutdown();
+
+
+   }, rmw_qos_profile_default);
+
+
+  if (source_.inputmode== Source::CAMERA)
+  {
+     // Initialize OpenCV
+      cap_.open(source_.device);
+      if (!cap_.isOpened())
+      {
+        throw std::runtime_error("Could not open video stream!");
+      }
+
+        thread_ = std::thread(std::bind(&Source_ADAS::loop_CameraSrc, this));
+  }
+
+  else
+  if (source_.inputmode== Source::FOLDER)
+  	thread_ = std::thread(std::bind(&Source_ADAS::loop_FolderSrc, this));
+
+  else
+  	throw std::runtime_error("The input mode for the program is not recognized....shutting down");
+
+}
+
+
+
+  virtual ~Source_ADAS()
+  {
+    // Make sure to join the thread on shutdown.
+    if (thread_.joinable()) {
+      thread_.join();
+    }
+  }
+
+
+
+  void loop_CameraSrc()
+  {
+
+
+    // While pipeline is up and running...
+    while (rclcpp::ok())
+
+    {
+
+      if ( source_.paused.load())
+    	  continue;
+
+      // Capture a frame from OpenCV.
+       cap_ >> frame_;
+
+      if (frame_.empty())
+        continue;
+
+      // Create a new unique_ptr to an Image message for storage.
+      sensor_msgs::msg::Image::UniquePtr msg(new sensor_msgs::msg::Image());
+
+      // Pack the OpenCV image into the ROS image.
+      set_now(msg->header.stamp);
+      msg->header.frame_id = "camera_frame";
+      msg->height = frame_.cols;
+      msg->width = frame_.rows;
+      msg->encoding = mat_type2encoding(frame_.type());
+      msg->is_bigendian = false;
+      msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(frame_.step);
+      msg->data.assign(frame_.datastart, frame_.dataend);
+
+
+      cv::imshow("Camera", frame_);
+
+
+      pub_->publish(msg);  // Publish.
+
+    }
+
+    cap_.release();
+
+  }
+
+
+  void loop_FolderSrc()
+    {
+
+      int Idx=1;
+	  std::chrono::time_point<std::chrono::system_clock> start, end;
+	  std::string path = "../inputdata/" + source_.SourcePath;
+
+      // While running...
+      while (rclcpp::ok() )
+      {
+    	if (source_.paused.load())
+    	  continue;
+
+    	auto start = high_resolution_clock::now();
+
+
+    	//double startTime = (double)cv::getTickCount();
+
+
+    	char Img_Path[256];
+    	sprintf(Img_Path, path.c_str() , Idx);
+
+
+    	try
+    	{
+    		frame_ = cv::imread(Img_Path);
+    	}
+    	catch(std::exception &e)
+    	{
+    		break;
+    	}
+
+
+        // Create a new unique_ptr to an Image message for storage.
+        sensor_msgs::msg::Image::UniquePtr msg(new sensor_msgs::msg::Image());
+
+
+        // Pack the OpenCV image into the ROS image.
+        set_now(msg->header.stamp);
+        msg->header.frame_id = Img_Path;
+        msg->height = frame_.cols;
+        msg->width = frame_.rows;
+        msg->encoding = mat_type2encoding(frame_.type());
+        msg->is_bigendian = false;
+        msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(frame_.step);
+        msg->data.assign(frame_.datastart, frame_.dataend);
+
+        //wait for target duration
+        auto end = high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> duration = end-start;
+
+
+        while (duration.count() < (1.0/source_.fps)*1000)
+        {
+
+        	//std::cout<<duration.count() << std::endl;
+        	end = high_resolution_clock::now();
+        	duration = end- start;
+        }
+
+        pub_->publish(msg);  // Publish.
+       //cv::imshow("Camera", frame_);
+        Idx++;
+      }
+
+    }
+
+
+
+  std::chrono::high_resolution_clock Clock;
+  rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr pub_;
+  rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr ctrlsub_;
+  std::thread thread_;
+  cv::VideoCapture cap_;
+  cv::Mat frame_;
+  Source_Parameters source_;
+
+};
+
+#endif  // IMAGE_PIPELINE__CAMERA_NODE_HPP_

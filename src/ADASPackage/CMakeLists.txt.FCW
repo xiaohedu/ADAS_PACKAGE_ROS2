@@ -1,0 +1,61 @@
+cmake_minimum_required(VERSION 2.8.3)
+
+project(adas_pipeline)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+
+
+if(NOT WIN32)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
+endif()
+
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rmw REQUIRED)
+find_package(rmw_implementation_cmake REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(OpenCV REQUIRED)
+find_package(Boost REQUIRED)
+find_package(CUDA REQUIRED )
+
+
+
+include_directories(include ${Boost_INCLUDE_DIRS}  ${CUDA_INCLUDE_PATH} ${OpenCV_INCLUDE_PATH})
+
+ 
+#A single program with one of each of the image pipeline demo nodes. 
+add_executable(ADAS_Pipeline_Manager
+ADASPackage/ADAS_Pipeline_Manager_Source_FCW.cpp)
+ament_target_dependencies(ADAS_Pipeline_Manager "rclcpp" "sensor_msgs" "OpenCV")
+target_link_libraries( ADAS_Pipeline_Manager ${OpenCV_LIBS} ${CUDA_LIBS}  )
+  
+  
+ #  A stand alone node which produces images using OpenCV. 
+   add_executable(camera_node
+   ADASPackage/InputStream/camera_node.cpp)
+   ament_target_dependencies(camera_node
+    				"rclcpp"
+    				"sensor_msgs"
+    				"OpenCV")
+
+
+  # A stand alone node which performs CAR Detection on the road images
+  add_executable(detector_node ADASPackage/FCW/detector.cpp  )
+  ament_target_dependencies(detector_node
+   				 "rclcpp"
+   				 "sensor_msgs"
+   				 "OpenCV")
+  target_link_libraries(detector_node ${OpenCV_LIBS} ${CUDA_LIBS} )  
+
+     
+
+  install(TARGETS   
+    ADAS_Pipeline_Manager
+    camera_node
+    detector_node
+    DESTINATION bin)
+
+
+#call_for_each_rmw_implementation(targets GENERATE_DEFAULT)
+
+ament_package()

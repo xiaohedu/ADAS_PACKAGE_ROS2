@@ -1,0 +1,22 @@
+{
+  "package_name": "adas_pipeline",
+  "output_dir": "/home/rameez/ADAS_ROS2/ADAS_ws/src/ADASPackage/rosidl_typesupport_opensplice_cpp/adas_pipeline",
+  "template_dir": "/home/rameez/ros2_ws/install/share/rosidl_typesupport_opensplice_cpp/resource",
+  "ros_interface_files": [
+    "/home/rameez/ADAS_ROS2/ADAS_ws/src/ADASPackage/msg/SourceParameters.msg"
+  ],
+  "ros_interface_dependencies": [
+    "builtin_interfaces:/home/rameez/ros2_ws/install/share/builtin_interfaces/msg/Duration.msg",
+    "builtin_interfaces:/home/rameez/ros2_ws/install/share/builtin_interfaces/msg/Time.msg"
+  ],
+  "target_dependencies": [
+    "/home/rameez/ros2_ws/install/lib/rosidl_typesupport_opensplice_cpp/rosidl_typesupport_opensplice_cpp",
+    "/home/rameez/ros2_ws/install/lib/python3.4/site-packages/rosidl_typesupport_opensplice_cpp/__init__.py",
+    "/home/rameez/ros2_ws/install/share/rosidl_typesupport_opensplice_cpp/resource/msg__type_support.hpp.template",
+    "/home/rameez/ros2_ws/install/share/rosidl_typesupport_opensplice_cpp/resource/msg__type_support.cpp.template",
+    "/home/rameez/ros2_ws/install/share/rosidl_typesupport_opensplice_cpp/resource/srv__type_support.cpp.template"
+  ],
+  "additional_files": [
+    "/home/rameez/ADAS_ROS2/ADAS_ws/src/ADASPackage/rosidl_generator_dds_idl/adas_pipeline/msg/dds_opensplice/SourceParameters_.idl"
+  ]
+}

@@ -1,0 +1,13 @@
+detector
+!detector/
+testBinaryIO
+!testBinaryIO/
+extractor
+!extractor/
+.project
+.cproject
+*~
+*.pdf
+CMakeCache.txt
+CMakeFiles/
+/data/

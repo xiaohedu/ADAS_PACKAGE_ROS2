@@ -1,0 +1,38 @@
+// generated from rosidl_generator_dds_idl/resource/msg.idl.template
+
+#ifndef __adas_pipeline__msg__SourceParameters__idl__
+#define __adas_pipeline__msg__SourceParameters__idl__
+
+
+module adas_pipeline
+{
+
+module msg
+{
+
+module dds_
+{
+
+
+
+
+struct SourceParameters_
+{
+
+  long inputmode_;
+  long device_;
+  string dir_;
+  float fps_;
+  boolean paused_;
+
+};  // struct SourceParameters_
+
+#pragma keylist SourceParameters_
+
+};  // module dds_
+
+};  // module msg
+
+};  // module adas_pipeline
+
+#endif  // __adas_pipeline__msg__SourceParameters__idl__
