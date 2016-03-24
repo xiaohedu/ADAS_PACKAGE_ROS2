@@ -1,0 +1,9 @@
+/srv/
+/rosidl_typesupport_opensplice_cpp/
+/rosidl_typesupport_introspection_cpp/
+/rosidl_typesupport_introspection_c/
+/rosidl_generator_dds_idl/
+/rosidl_generator_cpp/
+/rosidl_generator_c/
+/rosidl_cmake/
+/msg/

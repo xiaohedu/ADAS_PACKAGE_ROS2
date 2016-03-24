@@ -35,14 +35,6 @@ link_directories(${GSTREAMER_LIBRARIES})
 
 FILE(GLOB_RECURSE SRCS_LaneDetect LDW/LaneDetector/*.cpp )
 
- 
-#build Messages for the Package
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "msg/SourceParameters.msg"
-  DEPENDENCIES builtin_interfaces
-)
-
-
 
  # A single program that builds the complete pipeline for ADAS
  

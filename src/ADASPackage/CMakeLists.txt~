@@ -13,6 +13,7 @@ find_package(rclcpp REQUIRED)
 find_package(rmw REQUIRED)
 find_package(rmw_implementation_cmake REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(example_interfaces REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(Boost REQUIRED)
@@ -33,14 +34,6 @@ include_directories(include ${Boost_INCLUDE_DIRS} ${GSTREAMER_BASE_INCLUDE_DIRS}
 link_directories(${GSTREAMER_LIBRARIES})
 
 FILE(GLOB_RECURSE SRCS_LaneDetect LDW/LaneDetector/*.cpp )
-
- 
-#build Messages for the Package
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "msg/SourceParameters.msg"
-  DEPENDENCIES builtin_interfaces
-)
-
 
 
  # A single program that builds the complete pipeline for ADAS
