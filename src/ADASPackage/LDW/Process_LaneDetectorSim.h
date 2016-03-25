@@ -23,40 +23,43 @@
 #include <sys/ipc.h>
 #include "errno.h"
 
-namespace LaneDetectorSim{
-    const int NUM_LANE = 17;
-    const std::string laneFeatureName[NUM_LANE] = 
-    {
-        "Frame", 
-        "LO", "LATSD", "LATSD_b", 
-        "LATMEAN", "LATMEAN_b", 
-        "LANEDEV", "LANEDEV_b",
-        "LANEX", 
-        "TLC", "TLC_2s","TLCF_2s", "TLC_halfs", "TLCF_halfs", "TLC_min",
-        // "TOT",
-        "execTime", "pastTime"
-    };
-    
-    void ProcessLaneImage(cv::Mat &laneMat, 
-                          const LaneDetector::LaneDetectorConf &laneDetectorConf, 
-                          const double &startTime,
-                          cv::KalmanFilter &laneKalmanFilter, 
-                          cv::Mat &laneKalmanMeasureMat, int &laneKalmanIdx, 
-                          std::vector<cv::Vec2f> &hfLanes, 
-                          std::vector<cv::Vec2f> &lastHfLanes, 
-                          double & lastLateralOffset,
-                          double &lateralOffset, int &isChangeLane,
-                          int &detectLaneFlag,  const int &idx, double &execTime, 
-                          std::vector<cv::Vec2f> &preHfLanes, int &changeDone,
-                          const double &YAW_ANGLE, const double &PITCH_ANGLE); 
-   
-    void GetSamplingTime(const char *fileName, std::vector<float> &samplingTime);
-    
-    void InitRecordData(std::ofstream &file, const char* fileName, const std::string *strName, const int &elemNum);
-    
-    void RecordLaneFeatures(std::ofstream &file, const LaneDetector::LaneFeature &laneFeatures, 
-                        const double &execTime, const double &pastTime);
-    
-    void CodeMsg( const LaneDetector::LaneFeature &laneFeatures, char *str);
+namespace LaneDetectorSim
+{
+const int NUM_LANE = 17;
+const std::string laneFeatureName[NUM_LANE] = { "Frame",     "LO",      "LATSD",     "LATSD_b",    "LATMEAN",
+                                                "LATMEAN_b", "LANEDEV", "LANEDEV_b", "LANEX",      "TLC",
+                                                "TLC_2s",    "TLCF_2s", "TLC_halfs", "TLCF_halfs", "TLC_min",
+                                                // "TOT",
+                                                "execTime",  "pastTime" };
+
+void ProcessLaneImage(cv::Mat& laneMat,
+                      const LaneDetector::LaneDetectorConf& laneDetectorConf,
+                      const double& startTime,
+                      cv::KalmanFilter& laneKalmanFilter,
+                      cv::Mat& laneKalmanMeasureMat,
+                      int& laneKalmanIdx,
+                      std::vector<cv::Vec2f>& hfLanes,
+                      std::vector<cv::Vec2f>& lastHfLanes,
+                      double& lastLateralOffset,
+                      double& lateralOffset,
+                      int& isChangeLane,
+                      int& detectLaneFlag,
+                      const int& idx,
+                      double& execTime,
+                      std::vector<cv::Vec2f>& preHfLanes,
+                      int& changeDone,
+                      const double& YAW_ANGLE,
+                      const double& PITCH_ANGLE);
+
+void GetSamplingTime(const char* fileName, std::vector<float>& samplingTime);
+
+void InitRecordData(std::ofstream& file, const char* fileName, const std::string* strName, const int& elemNum);
+
+void RecordLaneFeatures(std::ofstream& file,
+                        const LaneDetector::LaneFeature& laneFeatures,
+                        const double& execTime,
+                        const double& pastTime);
+
+void CodeMsg(const LaneDetector::LaneFeature& laneFeatures, char* str);
 }
 #endif

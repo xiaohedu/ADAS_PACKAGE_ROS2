@@ -1,18 +1,15 @@
 
-#include"main_LaneDetectorSim.h"
-using namespace::LaneDetectorSim;
+#include "main_LaneDetectorSim.h"
+using namespace ::LaneDetectorSim;
 
-
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
 
-	rclcpp::init(argc, argv);
+    rclcpp::init(argc, argv);
 
+    auto lanedetect_node = std::make_shared<LaneDetectNode>("image", "lanedetect_image");
 
-	auto lanedetect_node =
-	      std::make_shared<LaneDetectNode>("image", "lanedetect_image");
+    rclcpp::spin(lanedetect_node);
 
-	rclcpp::spin(lanedetect_node);
-
-  return 0;
+    return 0;
 }
