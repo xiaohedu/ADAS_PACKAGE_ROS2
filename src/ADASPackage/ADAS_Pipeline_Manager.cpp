@@ -344,7 +344,7 @@ int main(int argc, char* argv[])
 
             /* reset spin request */
             Pipeline_spin_request = false;
-            // printed=false;
+            printed=false;
 
             ////////////////////////////////////////////////////////////////////////
         }
