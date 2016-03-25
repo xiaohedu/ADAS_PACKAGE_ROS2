@@ -317,7 +317,7 @@ int main(int argc, char* argv[])
             cout << "======================================================" << endl;
             cout << "              Spinning Started                       " << endl;
             cout << "======================================================" << endl;
-            cout << "ROS Spinning.... " << endl << endl;
+            cout << "Spinning nodes.... " << endl << endl;
 
    
 
@@ -327,9 +327,9 @@ int main(int argc, char* argv[])
             
 
             cout << "======================================================" << endl;
-            cout << "              Spinning Finished                 " << endl;
+            cout << "              Spinning Finished                       " << endl;
             cout << "======================================================" << endl;
-            cout << "Exiting ROS Spin.... " << endl << endl;
+            cout << "ROS spin exited... " << endl << endl;
 
             /*Reset the Pipeline Objects */
 
@@ -345,6 +345,7 @@ int main(int argc, char* argv[])
             /* reset spin request */
             Pipeline_spin_request = false;
             printed=false;
+        
 
             ////////////////////////////////////////////////////////////////////////
         }
