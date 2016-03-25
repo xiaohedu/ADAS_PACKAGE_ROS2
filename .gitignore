@@ -2,3 +2,8 @@
 /install/
 /inputdata/
 /.metadata/
+*Makefile
+*.db
+*.workspace
+*.project
+*.mk
