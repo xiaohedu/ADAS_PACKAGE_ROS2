@@ -93,14 +93,6 @@ private:
 
 
 
-
-
-
-
-
-
-
-
 class ADAS_CommandServer : public rclcpp::Node
 {
 
@@ -165,11 +157,10 @@ public:
                     }
 
                 }
-
-                /*SEND BACK THE PIPELINECONFIG*/
                     else
 
-                    if(msg_android_->messagetype() == MessageType::LDW_Config) {
+                    if(msg_android_->messagetype() == MessageType::LDW_Config)
+                {
 
                     Message::LDWConfig config = msg_android_->ldw_config();
 
@@ -189,11 +180,9 @@ public:
 
                 }
                 
-                
-                
-
-                /*SEND BACK THE PIPELINECONFIG*/
-                 else if(msg_android_->messagetype() == MessageType::FCW_Config) {
+                 else
+                     
+                  if (msg_android_->messagetype() == MessageType::FCW_Config) {
 
                     Message::FCWConfig config = msg_android_->fcw_config();
 

@@ -174,6 +174,9 @@ void write_file(string filename, string& write_txt)
 }
 // the function detector_out returns the string which will be the content of the generated txt file for the negative
 // mining.
+
+
+
 string detector_out(Rect* r, string& classifiers_tag)
 {
     int x1;
@@ -191,24 +194,32 @@ string detector_out(Rect* r, string& classifiers_tag)
     return txt_out_string;
 }
 
+
+
+
+
+/*Constructor of the class App, contains the subscriptions*/
 App::App(const std::string& input, const std::string& output)
-    : Node("detector_node", true)
+    : Node("detector_node", true), cardetector(false)
 
 {
 
-    // Create a subscription on the input topic which prints on receipt of new messages.
-    ctrlsub_ = this->create_subscription<adas_interfaces::msg::FCWParameters>(
-        "ADAS_command_FCW",
-        [this](adas_interfaces::msg::FCWParameters::UniquePtr msg) {
+    // Create a subscription on the control messages from the ADAS Manager
+    ctrlsub_ = this->create_subscription<adas_interfaces::msg::FCWParameters>( "ADAS_command_FCW",
+              [this](adas_interfaces::msg::FCWParameters::UniquePtr msg) {
 
             if(msg)
-                this->gr_threshold = msg->gr_threshold;
+            {
+            
+            this->gr_threshold = msg->gr_threshold;
             this->hit_threshold = msg->hit_threshold;
             this->make_gray = msg->make_gray;
             this->nlevels = msg->nlevels;
             this->scale = msg->scale;
             this->use_gpu = msg->processor;
             this->cardetector = msg->cardetector;
+            
+            }
 
             std::cout << "======================================================" << endl;
             std::cout << "                  FCW Configured                     " << endl << endl;
@@ -231,6 +242,11 @@ App::App(const std::string& input, const std::string& output)
         },
         rmw_qos_profile_default);
 
+
+
+
+
+
     cv::gpu::printShortCudaDeviceInfo(cv::gpu::getDevice());
 
     auto qos = rmw_qos_profile_sensor_data;
@@ -249,6 +265,11 @@ App::App(const std::string& input, const std::string& output)
 
     before_run();
 
+
+
+
+
+
     // Create a subscription on the input topic.
     /* the actual run function is now inside the subscription itself. from the begining of the subscription
       we recieve the current frame and work with it based on the number of provided classifiers in the classifiers.txt
@@ -262,69 +283,28 @@ App::App(const std::string& input, const std::string& output)
         [this, captured_pub](sensor_msgs::msg::Image::UniquePtr msg)
 
         {
+            
 
             auto pub_ptr = captured_pub.lock();
-            if(!pub_ptr) {
+            if(!pub_ptr) 
+            {
+                
                 return;
             }
-            classifier_index = 0;
+            
             cv::Mat frame(msg->width, msg->height, encoding2mat_type(msg->encoding), msg->data.data());
-
+            
+            if ( this->cardetector)
+            {
+                classifier_index = 0;
             while(classifier_index < classifier_list.size()) //&& !frame.empty())// as long as running is set to be true
                                                              //and we still have frames to run then
             {
 
                 if(classifier_index == 0) {
-                    // the following segment of the code is commented because the input frame is provided by ROS
-                    /*if (args.src_is_video) // if the input is a video
-                    {
-                            vc.open(args.src.c_str());
-                            if (!vc.isOpened())
-                                    throw runtime_error(
-                                                    string("can't open video file: " + args.src));
-                            vc >> frame;
-                    } else if (args.src_is_camera) // if the input is from a camera
-                    {
-                            vc.open(args.camera_id);
-                            if (!vc.isOpened()) {
-                                    stringstream msg;
-                                    msg << "can't open camera: " << args.camera_id;
-                                    throw runtime_error(msg.str());
-                            }
-                            vc >> frame;
-                    } else // in case the input is just an image
-                    {
-                            if (args.src_is_directory == true) { // if the input is a directory then the code will loop
-                    across all the .png and .jpg images in the directory
-                                    // prepare next image of directory
-                                    running = false; // by default, we assume there will be no more image available
-
-                                    while ((ep = readdir(dp))) // iterate until we find the next image
-                                    {
-                                            if ((point = strrchr(ep->d_name, '.')) != NULL) {
-                                                    if (strcmp(point, ".png") == 0
-                                                                    || strcmp(point, ".jpg") == 0) // check extension
-                    for image type
-                                                                                    {
-                                                            // we found an image
-                                                            running = true; // we can run something during the next loop
-                                                            args.src = directory_name + string(ep->d_name); // create
-                    full path to image file
-                                                            cout << "Processing: " << args.src << "\n";
-                                                            break; // stop searching some next image
-                                                    }
-                                            }
-                                    }
-                            }
-
-                            frame = imread(args.src); // update frame to the input image
-                    }*/
+                   
 
                     frame.copyTo(img_to_show_final);
-
-                    /*if (frame.empty())
-                            throw runtime_error(
-                                            string("can't open image file: " + args.src));*/
                     write_txt = "";
                 }
                 if(classifier_index < classifier_list.size()) { // as long as we have classifiers in the list
@@ -682,14 +662,38 @@ App::App(const std::string& input, const std::string& output)
             }
             // cv::imshow("input frame", frame);
 
-            handleKey((char)waitKey(3));
-            pub_ptr->publish(msg); // Publish it along.
+            //handleKey((char)waitKey(3));
+            pub_ptr->publish(msg); // Publish it along.s
+            
+             } //if (car_detector)
+             
+             
+             
+             
+             
+             
+        else
+        {
+            
+            set_now(msg->header.stamp);
+            msg->header.frame_id = "camera_frame";
+            msg->height = frame.cols;
+            msg->width = frame.rows;
+            msg->encoding = mat_type2encoding(frame.type());
+            msg->is_bigendian = false;
+            msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(frame.step);
+            msg->data.assign(frame.datastart, frame.dataend);
+             pub_ptr->publish(msg); // publish the orignal frame
 
-        },
-        qos);
-
-    // run();
+        }
+            
+        },qos);
 }
+
+
+
+
+
 
 void App::before_run()
 {
@@ -762,6 +766,9 @@ void App::before_run()
             }
     }*/
 }
+
+
+
 
 void App::handleKey(char key)
 {
@@ -846,6 +853,8 @@ void App::handleKey(char key)
         break;
     }
 }
+
+
 
 inline void App::hogWorkBegin()
 {
