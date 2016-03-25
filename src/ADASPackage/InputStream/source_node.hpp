@@ -74,6 +74,14 @@ public:
                     std::cout << "======================================================" << endl;
                     std::cout << "paused.... " << endl << endl;
                 }
+                
+                 else
+                {
+                    std::cout << "======================================================" << endl;
+                    std::cout << "              Setting Source state to Play            " << endl;
+                    std::cout << "======================================================" << endl;
+                    std::cout << "playing.... " << endl << endl;
+                }
 
                 //adas_interfaces::LDWParameters::Int["name"] = 10;
                 //adas_interfaces::LDWParameters::Int["name"] = 10;
@@ -113,6 +121,13 @@ public:
 
     virtual ~Source_ADAS()
     {
+        
+        
+        std::cout << "======================================================" << endl;
+        std::cout << "              Destroying the Source node               " << endl;
+        std::cout << "======================================================" << endl;
+        std::cout << "stopped.... " << endl << endl;
+        
         
        source_.stopped.store(true);
         if(thread_.joinable()) {
