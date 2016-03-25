@@ -32,10 +32,12 @@ struct Streamer_Parameters
 {
     Streamer_Parameters()
     {
+        
+        //list of run time parameters is empty right now.
+        //Todo: make IP runtime configureable
+        //Todo: make Pipeline Stop Completely at run time
     }
-    std::atomic<bool> stop;
-    std::atomic<bool> pause;
-    std::atomic<bool> play;
+    
 };
 
 bool streamer_play();
@@ -423,6 +425,13 @@ bool streamer_play()
     return TRUE;
 }
 
+
+
+
+
+
+
+
 // Node which receives sensor_msgs/Image messages and renders them using OpenCV.
 class Streamer : public rclcpp::Node
 {
@@ -443,18 +452,14 @@ public:
         /*Initialise Gstreamer */
         XInitThreads();
         streamer_init();
+        app.IP_address = IP.c_str();
+        app.Port = port;
+        app.is_init= streamer_run(fps, w / 2, h / 2);
         
         }
 
-        app.IP_address = IP.c_str();
-        app.Port = port;
-
-        streamer_.pause.store(false);
-        streamer_.stop.store(false);
-        streamer_.play.store(false);
-
-        /* Configure and starts the streamer pipeline*/
-        if(streamer_run(fps, w / 2, h / 2))
+         
+        if (app.is_init)
 
         {
 
@@ -528,7 +533,7 @@ public:
       virtual ~Streamer()
     {
         
-      streamer_stop();
+      //streamer_stop();
     }
 
 
