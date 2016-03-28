@@ -45,7 +45,7 @@ public:
                 const std::string output_topic,
                 const std::string& node_name = "source_node")
         : Node(node_name, true)
-        , path_("cropped/cropped_%d.png")
+        , path_("clips/lane_%d.png")
         , inputmode_(Source::FOLDER)
 
     {
@@ -57,7 +57,7 @@ public:
 
                 if(msg) {
                     this->source_.paused.store(msg->paused);
-                    //this->source_.stopped.store(msg->stopped);
+                    this->source_.stopped.store(msg->stopped);
                 }
 
                 if(this->source_.stopped.load() == true) {
@@ -172,17 +172,19 @@ public:
         cap_.release();
     }
 
+
+
+
     void loop_FolderSrc()
     {
-
-        string p = "cropped/cropped_%d.png";
-
         int Idx = 1;
         std::chrono::time_point<std::chrono::system_clock> start, end;
-        std::string path = "../inputdata/" + path_;
-
+        std::string path = "inputdata/" + path_;
+        
         // While running...
         while(rclcpp::ok() && !source_.stopped.load()) {
+            
+            
             if(source_.paused.load())
                 continue;
 
@@ -193,12 +195,15 @@ public:
             char Img_Path[256];
             sprintf(Img_Path, path.c_str(), Idx);
 
-            try {
-                frame_ = cv::imread(Img_Path);
-            } catch(std::exception& e) {
+            frame_ = cv::imread(Img_Path);
+            
+              if (! frame_.data)
+            {
+                source_.stopped.store(true);
                 break;
             }
-
+            
+            
             // Create a new unique_ptr to an Image message for storage.
             sensor_msgs::msg::Image::UniquePtr msg(new sensor_msgs::msg::Image());
 
@@ -223,8 +228,7 @@ public:
                 duration = end - start;
             }
 
-            pub_->publish(msg); // Publish.
-            // cv::imshow("Camera", frame_);
+            pub_->publish(msg);
             Idx++;
         }
     }

@@ -45,6 +45,7 @@ public:
     {
 
         socket_.bind("tcp://*:5555");
+        //ToDo: while rclcpp::ok
         while(true) {
             //  Wait for next request from client
             zmq::message_t request;
@@ -88,6 +89,14 @@ public:
             socket_.send(reply);
         }
     }
+    
+    
+ virtual ~ZMQ_Server()
+ {
+     
+
+     
+ }
 
 private:
     zmq::context_t ctx_;
@@ -150,18 +159,23 @@ public:
                     cout<<endl;
                      if(a == 1) {
                         msg->paused = true;
+                        msg->stream = 0;
                         pub_ptr->publish(msg);
                     } else if(a==0) {
                         msg->paused = false;
+                        msg->stream = 0;
                         pub_ptr->publish(msg);
                     } else if(a==2) {
                         msg->stopped = true;
+                        msg->stream = 0;
                         pub_ptr->publish(msg);
                         executor.cancel();
                     }
                 }
                     /*Remove until here*/
-
+                    
+                    
+                    
                 /*SEND BACK THE PIPELINECONFIG*/
                 if(msg_android_->messagetype() == MessageType::PipeLine_Config) {
                     
@@ -175,8 +189,7 @@ public:
                     if(!pub_ptr)
                         return;
 
-                    msg->inputmode = static_cast<int>(config.source());
-                    msg->dir = config.source_folder();
+                    msg->stream = static_cast<int>(config.stream());
                     
 
                     if(config.state() == State::PAUSE) {
@@ -207,7 +220,7 @@ public:
                         return;
 
                     msg->lane_detector = config.lane_detector();
-                    msg->alpha = config.coef_thetamax();
+                    msg->coef_thetamax = config.coef_thetamax();
                     msg->pitch_angle = config.pitch_angle();
                     msg->yaw_angle = config.yaw_angle();
                     msg->combo_id = config.detection_combination();
@@ -330,7 +343,7 @@ public:
         };
         
         /*ToRemove :200_s*/ 
-        timer_ = this->create_wall_timer(20_s, callback);
+        timer_ = this->create_wall_timer(10_s, callback);
          
     }
 
@@ -406,15 +419,16 @@ int main(int argc, char* argv[])
             // Source_ADAS::path_=config.source_folder();
              const char* IP = android_msg->pipeline_config().ip().c_str();
 
-             auto source_node = std::make_shared<Source_ADAS>(config.source(), config.source_folder(), "image");
+             //auto source_node = std::make_shared<Source_ADAS>(config.source(), config.source_folder(), "image");
+             auto source_node_manual = std::make_shared<Source_ADAS>(Source::CAMERA, "clips/lane_%d.png", "image");
              auto ADAS_command_server = std::make_shared<ADAS_CommandServer>(android_msg, executor);
-             auto lanedetect_node = std::make_shared<LaneDetectNode>("image", "lanedetect_image");
+             //auto lanedetect_node = std::make_shared<LaneDetectNode>("image", "lanedetect_image");
              //auto cardetect_node = std::make_shared<Detector>("image", "cardetect_image");
              
              //auto streamer_node_with_ldw = std::make_shared<Streamer>("lanedetect_image", IP, 5000);
                  
              auto streamer_node_with_localIP=
-                  std::make_shared<Streamer>("lanedetect_image", "127.0.0.1", 5000);
+                  std::make_shared<Streamer>("image","image", "127.0.0.1", 5000);
             
             // auto streamer_node_with_ldw   =   std::make_shared<Streamer>("image", "127.0.0.1", 5000);
 
@@ -422,16 +436,16 @@ int main(int argc, char* argv[])
 
             if(config.stream() == Stream::LDW) {
                 executor.add_node(ADAS_command_server);
-                executor.add_node(source_node);
-                executor.add_node(lanedetect_node);
+                executor.add_node(source_node_manual);
+                //executor.add_node(lanedetect_node);
                 executor.add_node(streamer_node_with_localIP);
 
             } else if(config.stream() == Stream::FCW) {
-                executor.add_node(ADAS_command_server);
-                executor.add_node(source_node);
-                executor.add_node(lanedetect_node);
+                //executor.add_node(ADAS_command_server);
+                //executor.add_node(source_node);
+                //executor.add_node(lanedetect_node);
                // executor.add_node(cardetect_node);
-                executor.add_node(streamer_node_with_localIP);
+                //executor.add_node(streamer_node_with_localIP);
             } 
 
             ////////////////////////////////////////////////////////////////////////
@@ -510,6 +524,7 @@ int main(int argc, char* argv[])
         }
     }
     
+     
      rclcpp::shutdown();
 
     return 0;

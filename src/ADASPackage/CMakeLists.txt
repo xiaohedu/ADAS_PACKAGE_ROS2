@@ -33,7 +33,7 @@ include_directories(include ${Boost_INCLUDE_DIRS} ${GSTREAMER_BASE_INCLUDE_DIRS}
 
 link_directories(${GSTREAMER_LIBRARIES})
 
-FILE(GLOB_RECURSE SRCS_LaneDetect LDW/LaneDetector/*.cpp )
+FILE(GLOB_RECURSE SRCS_LaneDetect LDW/LaneDetector/*.cpp LDW/LaneDetector/*.cc LDW/LaneDetector/*.c )
 
 
  # A single program that builds the complete pipeline for ADAS
@@ -50,7 +50,7 @@ FILE(GLOB_RECURSE SRCS_LaneDetect LDW/LaneDetector/*.cpp )
    				"sensor_msgs"
     			        "OpenCV"			
     			)
-  target_link_libraries(ADAS_Pipeline_Manager ${GSTREAMER_LIBRARIES} ${GLIB_LIBRARIES} ${GLIB_GOBJECT_LIBRARIES} ${GLIB_GIO_LIBRARIES} ${GLIB_GMODULE_LIBRARIES} ${GLIB_GTHREAD_LIBRARIES} ${OpenCV_LIBS} ${CUDA_LIBS} ${GSTREAMER_APP_LIBRARIES} ${X11_LIBRARIES} ${ZeroMQ_LIBRARIES} ${PROTOBUF_LIBRARY})
+  target_link_libraries(ADAS_Pipeline_Manager ${Boost_LIBRARIES} ${GSTREAMER_LIBRARIES} ${GLIB_LIBRARIES} ${GLIB_GOBJECT_LIBRARIES} ${GLIB_GIO_LIBRARIES} ${GLIB_GMODULE_LIBRARIES} ${GLIB_GTHREAD_LIBRARIES} ${OpenCV_LIBS} ${CUDA_LIBS} ${GSTREAMER_APP_LIBRARIES} ${X11_LIBRARIES} ${ZeroMQ_LIBRARIES} ${PROTOBUF_LIBRARY}  )
      
   
  

@@ -760,7 +760,7 @@ void Detector::before_run()
     // original code
     //     gpu_hog.setSVMDetector(detector);
     //     cpu_hog.setSVMDetector(detector);
-    ifstream file_classifiers_in("../inputdata/FCWdata/classifiers.txt"); // the text file containing the classifiers
+    ifstream file_classifiers_in("inputdata/FCWdata/classifiers.txt"); // the text file containing the classifiers
                                                                           // that will be used along the desired color
     string classifier_line; // the line read from the classifiers text file
     string colors;          // the string containging the colors values

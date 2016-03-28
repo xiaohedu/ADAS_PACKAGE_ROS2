@@ -6,7 +6,26 @@
 #include "LaneDetector/TrackLanes.h"
 #include "LaneDetector/LaneDetectorTools.h"
 #include "LaneDetector/GenerateLaneIndicators.h"
+#include "LaneDetector/IPMTransformation.h"
+#include "LaneDetector/CameraInfoOpt.h"
+#include "LaneDetector/LaneDetectorOpt.h"
+#include "LaneDetector/IPMTransJoost.hh"
+//extern "C" {
 
+//}
+
+//#include "cmdline.h"
+//extern "C" {
+//#include "../LaneDetector/init.hh"
+//}
+//*****************************************************
+// #include "../JoostFiles/mcv.hh"
+// #include "../JoostFiles/InversePerspectiveMapping.hh"
+// #include "../JoostFiles/LaneDetectorOpt.h"
+// #include "../JoostFiles/ranker.h"
+// #include <cv.h>
+// #include "../JoostFiles/LaneDetector.hh"
+//****************************************************
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -23,43 +42,54 @@
 #include <sys/ipc.h>
 #include "errno.h"
 
-namespace LaneDetectorSim
-{
-const int NUM_LANE = 17;
-const std::string laneFeatureName[NUM_LANE] = { "Frame",     "LO",      "LATSD",     "LATSD_b",    "LATMEAN",
-                                                "LATMEAN_b", "LANEDEV", "LANEDEV_b", "LANEX",      "TLC",
-                                                "TLC_2s",    "TLCF_2s", "TLC_halfs", "TLCF_halfs", "TLC_min",
-                                                // "TOT",
-                                                "execTime",  "pastTime" };
+namespace LaneDetectorSim{
+    const int NUM_LANE = 17;
+    const std::string laneFeatureName[NUM_LANE] =
+    {
+        "Frame",
+        "LO", "LATSD", "LATSD_b",
+        "LATMEAN", "LATMEAN_b",
+        "LANEDEV", "LANEDEV_b",
+        "LANEX",
+        "TLC", "TLC_2s","TLCF_2s", "TLC_halfs", "TLCF_halfs", "TLC_min",
+        // "TOT",
+        "execTime", "pastTime"
+    };
+    
+    void ProcessLaneImage_IPM(cv::Mat &laneMat,
+                          LaneDetector::LaneDetectorConf &laneDetectorConf,
+                          const double &startTime,
+                          cv::KalmanFilter &laneKalmanFilter,
+                          cv::Mat &laneKalmanMeasureMat, int &laneKalmanIdx,
+                          std::vector<cv::Vec2f> &hfLanes,
+                          std::vector<cv::Vec2f> &lastHfLanes,
+                          double & lastLateralOffset,
+                          double &lateralOffset, int &isChangeLane,
+                          int &detectLaneFlag,  const int &idx, double &execTime,
+                          std::vector<cv::Vec2f> &preHfLanes, int &changeDone,
+                          const double &YAW_ANGLE, const double &PITCH_ANGLE,
+                          LaneDetector_J::CameraInfo &cameraInfo, LaneDetector_J::LaneDetectorConf_J &lanesConf, cv::Mat &IPM_OUT, cv::Mat &IPM_cont, cv::Mat &particle_detect, cv::Mat &particle_track, int IPM_HK);
 
-void ProcessLaneImage(cv::Mat& laneMat,
-                      const LaneDetector::LaneDetectorConf& laneDetectorConf,
-                      const double& startTime,
-                      cv::KalmanFilter& laneKalmanFilter,
-                      cv::Mat& laneKalmanMeasureMat,
-                      int& laneKalmanIdx,
-                      std::vector<cv::Vec2f>& hfLanes,
-                      std::vector<cv::Vec2f>& lastHfLanes,
-                      double& lastLateralOffset,
-                      double& lateralOffset,
-                      int& isChangeLane,
-                      int& detectLaneFlag,
-                      const int& idx,
-                      double& execTime,
-                      std::vector<cv::Vec2f>& preHfLanes,
-                      int& changeDone,
-                      const double& YAW_ANGLE,
-                      const double& PITCH_ANGLE);
+    void ProcessLaneImage(cv::Mat &laneMat,
+                          LaneDetector::LaneDetectorConf &laneDetectorConf,
+                          const double &startTime,
+                          cv::KalmanFilter &laneKalmanFilter,
+                          cv::Mat &laneKalmanMeasureMat, int &laneKalmanIdx,
+                          std::vector<cv::Vec2f> &hfLanes,
+                          std::vector<cv::Vec2f> &lastHfLanes,
+                          double & lastLateralOffset,
+                          double &lateralOffset, int &isChangeLane,
+                          int &detectLaneFlag,  const int &idx, double &execTime,
+                          std::vector<cv::Vec2f> &preHfLanes, int &changeDone,
+                          const double &YAW_ANGLE, const double &PITCH_ANGLE);
 
-void GetSamplingTime(const char* fileName, std::vector<float>& samplingTime);
+    void GetSamplingTime(const char *fileName, std::vector<float> &samplingTime);
 
-void InitRecordData(std::ofstream& file, const char* fileName, const std::string* strName, const int& elemNum);
+    void InitRecordData(std::ofstream &file, const char* fileName, const std::string *strName, const int &elemNum);
 
-void RecordLaneFeatures(std::ofstream& file,
-                        const LaneDetector::LaneFeature& laneFeatures,
-                        const double& execTime,
-                        const double& pastTime);
+    void RecordLaneFeatures(std::ofstream &file, const LaneDetector::LaneFeature &laneFeatures,
+                        const double &execTime, const double &pastTime);
 
-void CodeMsg(const LaneDetector::LaneFeature& laneFeatures, char* str);
+    void CodeMsg( const LaneDetector::LaneFeature &laneFeatures, char *str);
 }
 #endif

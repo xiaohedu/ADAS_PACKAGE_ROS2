@@ -32,14 +32,10 @@ using namespace std;
 
 struct Streamer_Parameters
 {
-    Streamer_Parameters()
-    {
-        
-        //list of run time parameters is empty right now.
-        //Todo: make IP runtime configureable
-        //Todo: make Pipeline Stop Completely at run time
-    }
     
+            
+    Streamer_Parameters(): stream{0}{}
+    std::atomic<int> stream;
 };
 
 bool streamer_play();
@@ -362,8 +358,7 @@ gboolean streamer_run(guint in_framerate, guint out_width, guint out_height)
         return FALSE;
     }
 
-    gst_element_set_state(app.pipeline, GST_STATE_PLAYING);
-    g_debug("Running...\n");
+  
 
     if((app.m_loop_thread = g_thread_new("mainloop", (GThreadFunc)main_loop_run, NULL)) == NULL) {
         g_printerr("ERROR: cannot start loop thread\n");
@@ -373,12 +368,7 @@ gboolean streamer_run(guint in_framerate, guint out_width, guint out_height)
     gst_element_set_state(app.pipeline, GST_STATE_PLAYING);
     g_debug("Running...\n");
 
-    gst_element_set_state(app.pipeline, GST_STATE_PLAYING);
-    g_debug("Running...\n");
-    if((app.m_loop_thread = g_thread_new("mainloop", (GThreadFunc)main_loop_run, NULL)) == NULL) {
-        g_printerr("ERROR: cannot start loop thread\n");
-        return FALSE;
-    }
+
     return TRUE;
 }
 
@@ -441,7 +431,7 @@ class Streamer : public rclcpp::Node
 
 public:
 
-    Streamer(const std::string& input, const gchar* IP, int port, const std::string& node_name = "streamer_node")
+    Streamer(const std::string& input_ldw, const std::string& input_fcw, const gchar* IP, int port, const std::string& node_name = "streamer_node")
         : Node(node_name, true)
     {
 
@@ -467,40 +457,118 @@ public:
         {
 
             /* Create a subscripiption on the input topic. */
-            sub_ = this->create_subscription<sensor_msgs::msg::Image>(
-                input,
+            sub_ldw = this->create_subscription<sensor_msgs::msg::Image>(
+                input_ldw,
                 [node_name, this, app](const sensor_msgs::msg::Image::SharedPtr msg)
 
                 {
-                    // Create a cv::Mat from the image message (without copying).
-                    cv::Mat frame_(msg->width, msg->height, encoding2mat_type(msg->encoding), msg->data.data());
+                     static int frame_counts = 0;
                     
-                    
-                    
-                    this->frame_ = frame_;
+                    if (this->streamer_.stream.load()==0)
+                    {
+                        // Create a cv::Mat from the image message (without copying).
+                        cv::Mat frame_(msg->width, msg->height, encoding2mat_type(msg->encoding), msg->data.data());
+                        
+                        
+                        
+                        this->frame_ = frame_;
 
-                    format = mat_type2GSTencoding(frame_.type());
-                    //if(!streamer_.stop.load() && !streamer_.pause.load())
-                        streamer_feed(frame_.cols, frame_.rows, frame_.step[0] * frame_.rows, format, frame_.data);
+                        format = mat_type2GSTencoding(frame_.type());
+                            streamer_feed(frame_.cols, frame_.rows, frame_.step[0] * frame_.rows, format, frame_.data);
 
-                    static int frame_counts = 0;
-                    frame_counts++;
+                       
+                        frame_counts++;
                     
 
-                    if(frame_counts == 1) {
-                        {
-                            std::lock_guard<std::mutex> lock(mtx);
-                            cout << endl << endl << endl;
-                            cout << "======================================================" << endl;
-                            cout << "             Streaming server is UP!                 " << endl;
-                            cout << "======================================================" << endl;
-                            cout << " Feeding frames to --->" << app.IP_address << ":" << app.Port << endl << endl
-                                << endl;
-                        }
+                        if(frame_counts == 1) 
+                            {
+                                std::lock_guard<std::mutex> lock(mtx);
+                                cout << endl << endl << endl;
+                                cout << "======================================================" << endl;
+                                cout << "             Streaming server is UP!                 " << endl;
+                                cout << "======================================================" << endl;
+                                cout << " Feeding LDW frames to --->" << app.IP_address << ":" << app.Port << endl << endl
+                                    << endl;
+                            }
+                        
+                    }
+                    
+                    else
+                    {
+                        frame_counts=0;
                     }
 
                 },
                 qos);
+                
+                
+                
+                
+                
+                
+                
+                     /* Create a subscripiption on the input topic. */
+            sub_fcw = this->create_subscription<sensor_msgs::msg::Image>(
+                input_fcw,
+                [node_name, this, app](const sensor_msgs::msg::Image::SharedPtr msg)
+
+                {
+                    static int frame_counts = 0;
+                    
+                    if (this->streamer_.stream.load()==1)
+                    {
+                        // Create a cv::Mat from the image message (without copying).
+                        cv::Mat frame_(msg->width, msg->height, encoding2mat_type(msg->encoding), msg->data.data());
+                        
+                        
+                        
+                        this->frame_ = frame_;
+
+                        format = mat_type2GSTencoding(frame_.type());
+                        //if(!streamer_.stop.load() && !streamer_.pause.load())
+                            streamer_feed(frame_.cols, frame_.rows, frame_.step[0] * frame_.rows, format, frame_.data);
+
+                        
+                        frame_counts++;
+                    
+
+                        if(frame_counts == 1) 
+                            {
+                                std::lock_guard<std::mutex> lock(mtx);
+                                cout << endl << endl << endl;
+                                cout << "======================================================" << endl;
+                                cout << "             Streaming server is UP!                 " << endl;
+                                cout << "======================================================" << endl;
+                                cout << " Feeding FCW frames to --->" << app.IP_address << ":" << app.Port << endl << endl
+                                    << endl;
+                            }
+
+                    }
+                    else
+                
+                    {
+                            frame_counts = 0;
+                    }
+                    
+
+                },
+                qos);
+                
+                
+                
+            ctrlsub_ = this->create_subscription<adas_interfaces::msg::SourceParameters>(
+                      "ADAS_command_pipeline",
+                    [this](adas_interfaces::msg::SourceParameters::UniquePtr msg) {
+
+                      this->streamer_.stream.store( msg->stream);
+            },
+            rmw_qos_profile_default);
+                
+                
+                
+                
+                
+
                 
         }
 
@@ -542,11 +610,12 @@ public:
 
 
 private:
-    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr sub_;
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr sub_ldw;
+    rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr sub_fcw;
     cv::Mat frame_;
     gchar* format;
     guint Port = 5000;
-    rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr ctrlsub_;
+      rclcpp::Subscription<adas_interfaces::msg::SourceParameters>::SharedPtr ctrlsub_;
     Streamer_Parameters streamer_;
 };
 
