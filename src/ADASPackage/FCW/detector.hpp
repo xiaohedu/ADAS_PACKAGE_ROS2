@@ -47,13 +47,13 @@ struct FCW_Parameters
     bool cardetector;
 };
 
-/* class App is the class handling all the file's parameters*/
-class App : public rclcpp::Node
+/* class Detector is the class handling all the file's parameters*/
+class Detector : public rclcpp::Node
 
 {
 
 public:
-    App(const std::string& input, const std::string& output);
+    Detector(const std::string& input, const std::string& output);
     void before_run();
     void handleKey(char key);
 
@@ -68,7 +68,7 @@ public:
     string message() const;
 
 private:
-    App operator=(App&);
+    Detector operator=(Detector&);
     FCW_Parameters param_;
     bool running;
 
@@ -198,8 +198,8 @@ string detector_out(Rect* r, string& classifiers_tag)
 
 
 
-/*Constructor of the class App, contains the subscriptions*/
-App::App(const std::string& input, const std::string& output)
+/*Constructor of the class Detector, contains the subscriptions*/
+Detector::Detector(const std::string& input, const std::string& output)
     : Node("detector_node", true), cardetector(false)
 
 {
@@ -207,6 +207,13 @@ App::App(const std::string& input, const std::string& output)
     // Create a subscription on the control messages from the ADAS Manager
     ctrlsub_ = this->create_subscription<adas_interfaces::msg::FCWParameters>( "ADAS_command_FCW",
               [this](adas_interfaces::msg::FCWParameters::UniquePtr msg) {
+                  
+                  
+                  
+                  
+            std::cout << "======================================================" << endl;
+            std::cout << "               Configuring FCW Parameters             " << endl << endl;
+
 
             if(msg)
             {
@@ -219,10 +226,60 @@ App::App(const std::string& input, const std::string& output)
             this->use_gpu = msg->processor;
             this->cardetector = msg->cardetector;
             
-            }
+            
+            
+            if (msg->has_custom_field)
+                {
+                    
+                    int i;
+                    double d;
+                    bool b;
+                    string s;
+                    std::string::size_type sz;   // alias of size_t
+                    
+                    
+                    switch(msg->custom_type)
+                       {
+                           
+                           //Boolean
+                            case 0:
+                             istringstream(msg->custom_value)>>boolalpha>>b;
+                             adas_interfaces::LDWParameters::Boolean[msg->custom_id]=b;
+                             cout << "msg->custom_id : " << boolalpha <<adas_interfaces::LDWParameters::Boolean[msg->custom_id] << endl;
+                            break;
+                            
+                
+                            //Int
+                            case 1:
+                                 i = std::stoi (msg->custom_value, &sz);
+                                 adas_interfaces::LDWParameters::String[msg->custom_id]=  i;
+                                 cout << "msg->custom_id : " << adas_interfaces::LDWParameters::String[msg->custom_id] << endl;
+                                   
+                            break;
+                           
 
-            std::cout << "======================================================" << endl;
-            std::cout << "                  FCW Configured                     " << endl << endl;
+                            //String 
+                            case 2:
+                                    s= msg->custom_value;
+                                    adas_interfaces::LDWParameters::String[msg->custom_id]= s;
+                                    cout << "msg->custom_id : " << adas_interfaces::LDWParameters::String[msg->custom_id] << endl;
+                                   
+                            break;
+                            
+                            
+                            case 3:
+                                    d = std::stod (msg->custom_value, &sz);
+                                    adas_interfaces::LDWParameters::Double[msg->custom_id]=  d;
+                                    cout << "msg->custom_id : " << adas_interfaces::LDWParameters::Double[msg->custom_id]<< endl;
+                            
+                            break;
+                        } 
+                    
+                }
+
+                }
+            
+            
 
             cout << "Scale: " << scale << endl;
             /*if (args.resize_src) // incase image resize is requested as an input then print the other parameters
@@ -234,10 +291,9 @@ App::App(const std::string& input, const std::string& output)
              cout << "Win stride: (" << args.win_stride_width << ", "
                  << args.win_stride_height << ")\n";*/
             cout << "Hit threshold: " << hit_threshold << endl;
-            cout << "Gamma correction: " << gamma_corr << endl;
-            cout << endl;
+            cout << "Gamma correction: " << gamma_corr << endl<<endl;
             std::cout << "======================================================" << endl;
-            std::cout << endl << endl << endl;
+            std::cout << "                FCW Configured"<<endl << endl << endl;;
 
         },
         rmw_qos_profile_default);
@@ -695,7 +751,7 @@ App::App(const std::string& input, const std::string& output)
 
 
 
-void App::before_run()
+void Detector::before_run()
 {
     /*This function is responsible for initialization before the actual run and looping*/
     // Shah modification replaces below to load detecor in yml file
@@ -770,7 +826,7 @@ void App::before_run()
 
 
 
-void App::handleKey(char key)
+void Detector::handleKey(char key)
 {
     switch(key) {
     case 27:
@@ -856,38 +912,38 @@ void App::handleKey(char key)
 
 
 
-inline void App::hogWorkBegin()
+inline void Detector::hogWorkBegin()
 {
     hog_work_begin = getTickCount();
 }
 
-inline void App::hogWorkEnd()
+inline void Detector::hogWorkEnd()
 {
     int64 delta = getTickCount() - hog_work_begin;
     double freq = getTickFrequency();
     hog_work_fps = freq / delta;
 }
 
-inline string App::hogWorkFps() const
+inline string Detector::hogWorkFps() const
 { // only the hog classification working fps
     stringstream ss;
     ss << hog_work_fps;
     return ss.str();
 }
 
-inline void App::workBegin()
+inline void Detector::workBegin()
 {
     work_begin = getTickCount();
 }
 
-inline void App::workEnd()
+inline void Detector::workEnd()
 {
     int64 delta = getTickCount() - work_begin;
     double freq = getTickFrequency();
     work_fps = freq / delta;
 }
 
-inline string App::workFps() const
+inline string Detector::workFps() const
 { // the working fps of the run
     stringstream ss;
     ss << work_fps;

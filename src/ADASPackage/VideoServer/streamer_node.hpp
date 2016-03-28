@@ -15,6 +15,8 @@
 #ifndef IMAGE_PIPELINE__IMAGE_VIEW_NODE_HPP_
 #define IMAGE_PIPELINE__IMAGE_VIEW_NODE_HPP_
 #include <gst/gst.h>
+#include <string>
+#include <iostream>
 #include <gst/app/gstappsrc.h>
 #include <glib.h>
 #include <gio/gio.h>
@@ -55,14 +57,14 @@ typedef struct
     guint bus_watch_id;
 
     gboolean stop;
-
-    gboolean is_init, resize, have_data;
+    gboolean is_init =false;
+    gboolean resize, have_data;
     guint in_framerate, in_width, in_height, out_width, out_height;
     gchar* format = "BGR";
     GstBuffer* buffer;
     gint rotation;
 
-    const gchar* IP_address = "127.0.0.1";
+    const gchar* IP_address= "127.0.0.1";
     guint Port = 5000;
 
     GMutex mutex;
@@ -293,6 +295,7 @@ gboolean streamer_run(guint in_framerate, guint out_width, guint out_height)
     app.bus = gst_pipeline_get_bus(GST_PIPELINE(app.pipeline));
     app.bus_watch_id = gst_bus_add_watch(app.bus, bus_call, app.loop);
     gst_object_unref(app.bus);
+   
 
     g_object_set(G_OBJECT(app.sink), "host", app.IP_address, NULL);
     g_object_set(G_OBJECT(app.sink), "port", app.Port, NULL);
@@ -438,7 +441,7 @@ class Streamer : public rclcpp::Node
 
 public:
 
-    Streamer(const std::string& input, const std::string IP, int port, const std::string& node_name = "streamer_node")
+    Streamer(const std::string& input, const gchar* IP, int port, const std::string& node_name = "streamer_node")
         : Node(node_name, true)
     {
 
@@ -452,7 +455,7 @@ public:
         /*Initialise Gstreamer */
         XInitThreads();
         streamer_init();
-        app.IP_address = IP.c_str();
+        app.IP_address = IP;
         app.Port = port;
         app.is_init= streamer_run(fps, w / 2, h / 2);
         
@@ -463,7 +466,7 @@ public:
 
         {
 
-            /* Create a subscription on the input topic. */
+            /* Create a subscripiption on the input topic. */
             sub_ = this->create_subscription<sensor_msgs::msg::Image>(
                 input,
                 [node_name, this, app](const sensor_msgs::msg::Image::SharedPtr msg)
@@ -480,24 +483,25 @@ public:
                     //if(!streamer_.stop.load() && !streamer_.pause.load())
                         streamer_feed(frame_.cols, frame_.rows, frame_.step[0] * frame_.rows, format, frame_.data);
 
-                    static int frame_counts = 1;
+                    static int frame_counts = 0;
                     frame_counts++;
+                    
 
-                    if(frame_counts == 3) {
+                    if(frame_counts == 1) {
                         {
-                            std::string IP(app.IP_address);
                             std::lock_guard<std::mutex> lock(mtx);
                             cout << endl << endl << endl;
                             cout << "======================================================" << endl;
                             cout << "             Streaming server is UP!                 " << endl;
                             cout << "======================================================" << endl;
-                            cout << " Feeding frames to--->" << IP << ":" << app.Port << endl << endl
-                                 << endl;
+                            cout << " Feeding frames to --->" << app.IP_address << ":" << app.Port << endl << endl
+                                << endl;
                         }
                     }
 
                 },
                 qos);
+                
         }
 
         /*
@@ -542,7 +546,6 @@ private:
     cv::Mat frame_;
     gchar* format;
     guint Port = 5000;
-    std::string IP;
     rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr ctrlsub_;
     Streamer_Parameters streamer_;
 };

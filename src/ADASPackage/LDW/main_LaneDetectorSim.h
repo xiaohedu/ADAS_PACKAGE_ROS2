@@ -2,9 +2,9 @@
 #ifndef LaneDetectorSim_main_h
 #define LaneDetectorSim_main_h
 #include "Process_LaneDetectorSim.h"
+#include <iostream>   // std::cout
 #include <string>
 #include <chrono>
-#include <string>
 #include <thread>
 #include <memory>
 #include "opencv2/highgui/highgui.hpp"
@@ -35,8 +35,7 @@ struct LDW_Parameters
         , YAW_ANGLE(0)
         , PITCH_ANGLE(0.1)
         , alpha(0)
-        , filter_id(1)
-        , standard_combo_id(0)
+        , combo_id(0)
     {
     }
     LDW_Parameters(bool lanedetector, double yawangle, double pitchangle)
@@ -44,8 +43,7 @@ struct LDW_Parameters
         , YAW_ANGLE(0)
         , PITCH_ANGLE(0.1)
         , alpha(0)
-        , filter_id(1)
-        , standard_combo_id(0)
+        , combo_id(0)
     {
         LANE_DETECTOR = lanedetector;
         YAW_ANGLE = yawangle;
@@ -56,7 +54,7 @@ struct LDW_Parameters
     double PITCH_ANGLE = 0.1;
     double alpha;
     int filter_id;
-    int standard_combo_id;
+    int combo_id;
 };
 
 class LaneDetectNode : public rclcpp::Node
@@ -74,19 +72,89 @@ public:
         ctrlsub_ = this->create_subscription<adas_interfaces::msg::LDWParameters>(
             "ADAS_command_LDW",
             [this](adas_interfaces::msg::LDWParameters::UniquePtr msg) {
+                
+                
+            std::cout << "======================================================" << endl;
+            std::cout << "               Configuring LDW Parameters             " << endl << endl;
+
 
                 if(msg)
-                    this->param_.LANE_DETECTOR = msg->lane_detector;
+                {
+                    
+                
+                this->param_.LANE_DETECTOR = msg->lane_detector;
                 this->param_.PITCH_ANGLE = msg->pitch_angle;
                 this->param_.YAW_ANGLE = msg->yaw_angle;
                 this->param_.alpha = msg->alpha;
-                this->param_.filter_id = msg->filter_id;
-                this->param_.standard_combo_id = msg->combo_id;
+                this->param_.combo_id = msg->combo_id;
+                
+                
+                if (msg->has_custom_field)
+                {
+                    
+                    int i;
+                    double d;
+                    bool b;
+                    string s;
+                    std::string::size_type sz;   // alias of size_t
+                    
+                    
+                    switch(msg->custom_type)
+                       {
+                           
+                           //Boolean
+                            case 0:
+                             istringstream(msg->custom_value)>>boolalpha>>b;
+                             adas_interfaces::LDWParameters::Boolean[msg->custom_id]=b;
+                             cout << "msg->custom_id : " << boolalpha <<adas_interfaces::LDWParameters::Boolean[msg->custom_id] << endl;
+                            break;
+                            
+                
+                            //Int
+                            case 1:
+                                 i = std::stoi (msg->custom_value, &sz);
+                                 adas_interfaces::LDWParameters::String[msg->custom_id]=  i;
+                                 cout << "msg->custom_id : " << adas_interfaces::LDWParameters::String[msg->custom_id] << endl;
+                                   
+                            break;
+                           
 
-                std::cout << "======================================================" << endl;
-                std::cout << "                  LDW Configured                     " << endl;
-                std::cout << "======================================================" << endl;
-                std::cout << endl << endl;
+                            //String 
+                            case 2:
+                                    s= msg->custom_value;
+                                    adas_interfaces::LDWParameters::String[msg->custom_id]= s;
+                                    cout << "msg->custom_id : " << adas_interfaces::LDWParameters::String[msg->custom_id] << endl;
+                                   
+                            break;
+                            
+                            
+                            case 3:
+                                    d = std::stod (msg->custom_value, &sz);
+                                    adas_interfaces::LDWParameters::Double[msg->custom_id]=  d;
+                                    cout << "msg->custom_id : " << adas_interfaces::LDWParameters::Double[msg->custom_id] << endl;
+                            
+                            break;
+                        } 
+                    
+                }
+
+                }
+                
+
+            
+            cout << "LaneDetector: " << param_.LANE_DETECTOR << endl;
+            /*if (args.resize_src) // incase image resize is requested as an input then print the other parameters
+              cout << "Resized source: (" << args.width << ", " << args.height
+                  << ")\n";*/
+            cout << "Pitch: " << param_.PITCH_ANGLE << endl;
+            cout << "Yaw: " << param_.YAW_ANGLE << endl;
+            /* cout << "Win width: " << args.win_width << endl;
+             cout << "Win stride: (" << args.win_stride_width << ", "
+                 << args.win_stride_height << ")\n";*/
+            cout << "coef_thetamax: " << param_.alpha  << endl;
+            cout << "Combination ID: " << param_.combo_id << endl<<endl;
+            std::cout << "======================================================" << endl;
+            std::cout << "                LDW Configured"<<endl << endl << endl;
 
             },
             rmw_qos_profile_default);

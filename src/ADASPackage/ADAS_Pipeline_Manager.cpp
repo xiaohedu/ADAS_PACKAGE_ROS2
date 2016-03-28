@@ -6,6 +6,7 @@
 #include <functional>
 #include <assert.h>
 #include <mutex>
+#include "Aux/adas_android_Interface.hpp";
 #include "InputStream/source_node.hpp"
 #include "VideoServer/streamer_node.hpp"
 #include "LDW/main_LaneDetectorSim.h"
@@ -18,6 +19,7 @@
 #include <adas_interfaces/msg/source_parameters.hpp>
 #include <adas_interfaces/msg/ldw_parameters.hpp>
 #include <adas_interfaces/msg/fcw_parameters.hpp>
+
 #include <chrono>
 #include <cinttypes>
 #include <cstdio>
@@ -36,6 +38,7 @@ public:
         : ctx_(1)
         , socket_(ctx_, ZMQ_REP)
     {
+        
     }
 
     void run(const std::shared_ptr<Message>& msg_android)
@@ -119,21 +122,52 @@ public:
         std::weak_ptr<std::remove_pointer<decltype(fcw_pub_.get())>::type> fcw_captured_pub = fcw_pub_;
 
         auto callback = [&client_request, &executor, src_captured_pub, ldw_captured_pub, fcw_captured_pub, this]() -> void {
-
-            if(client_request.load() == true)
+            
+            /* ToRemove : uncomment next line */
+            //if(client_request.load() == true)
 
             {
 
                 cout << "======================================================" << endl;
                 cout << "           Distributing request to ROS Nodes         " << endl;
                 cout << "======================================================" << endl;
+                
 
-               // std::lock_guard<std::mutex> lock(android_msg_mutex);
+                std::lock_guard<std::mutex> lock(android_msg_mutex);
+                
+                
+                
+                
+                 /*To Remove */
+                 {
+                    adas_interfaces::msg::SourceParameters::UniquePtr msg(new adas_interfaces::msg::SourceParameters());
+                    auto pub_ptr = src_captured_pub.lock();
+                    if(!pub_ptr)
+                        return;
+                    int a;
+                    cout << "Enter the pipeline state"<<endl;
+                    cin>>a;
+                    cout<<endl;
+                     if(a == 1) {
+                        msg->paused = true;
+                        pub_ptr->publish(msg);
+                    } else if(a==0) {
+                        msg->paused = false;
+                        pub_ptr->publish(msg);
+                    } else if(a==2) {
+                        msg->stopped = true;
+                        pub_ptr->publish(msg);
+                        executor.cancel();
+                    }
+                }
+                    /*Remove until here*/
 
                 /*SEND BACK THE PIPELINECONFIG*/
                 if(msg_android_->messagetype() == MessageType::PipeLine_Config) {
+                    
+                    /*ToRemove : uncomment this section*/
 
-                    Message::PipelineConfig config = msg_android_->pipeline_config();
+                    /*Message::PipelineConfig config = msg_android_->pipeline_config();
 
                     adas_interfaces::msg::SourceParameters::UniquePtr msg(new adas_interfaces::msg::SourceParameters());
 
@@ -143,6 +177,7 @@ public:
 
                     msg->inputmode = static_cast<int>(config.source());
                     msg->dir = config.source_folder();
+                    
 
                     if(config.state() == State::PAUSE) {
                         msg->paused = true;
@@ -155,6 +190,7 @@ public:
                         pub_ptr->publish(msg);
                         executor.cancel();
                     }
+                     */
 
                 }
                     else
@@ -175,6 +211,50 @@ public:
                     msg->pitch_angle = config.pitch_angle();
                     msg->yaw_angle = config.yaw_angle();
                     msg->combo_id = config.detection_combination();
+                    
+                  
+                   
+                   if (config.has_custom())
+                   {
+                        
+                       Message::CustomField customfield= config.custom();
+                       
+                       msg->has_custom_field =true;
+                       switch(customfield.type())
+                       {
+                           
+                            case Type::Boolean:
+                            msg->custom_type =0;
+                            break;
+                            
+                            case Type::Int:
+                            msg->custom_type =1;
+                            break;
+                             
+                            case Type::String:
+                            msg->custom_type =2;
+                            break;
+                            
+                            case Type::Double:
+                            msg->custom_type =3;
+                            break;
+                        }
+                       
+                       msg->custom_id= customfield.name();
+                       msg->custom_value= customfield.value();
+                   }
+                   
+                   else
+                       
+                    {
+                         msg->has_custom_field =false;
+                           
+                    }
+                       
+                   
+                  
+                   
+                   //customfield.type()
 
                     pub_ptr->publish(msg);
 
@@ -182,7 +262,8 @@ public:
                 
                  else
                      
-                  if (msg_android_->messagetype() == MessageType::FCW_Config) {
+                  if (msg_android_->messagetype() == MessageType::FCW_Config) 
+                {
 
                     Message::FCWConfig config = msg_android_->fcw_config();
 
@@ -197,6 +278,48 @@ public:
                     msg->make_gray = config.grayinit();
                     msg->scale = config.hogscaleinit();
                     msg->hit_threshold = config.hitthreshold();
+                    
+                    
+                     if (config.has_custom())
+                   {
+                        
+                       Message::CustomField customfield= config.custom();
+                       
+                       msg->has_custom_field =true;
+                       switch(customfield.type())
+                       {
+                           
+                            case Type::Boolean:
+                            msg->custom_type =0;
+                            break;
+                            
+                            case Type::Int:
+                            msg->custom_type =1;
+                            break;
+                             
+                            case Type::String:
+                            msg->custom_type =2;
+                            break;
+                            
+                            case Type::Double:
+                            msg->custom_type =3;
+                            break;
+                        }
+                       
+                       msg->custom_id= customfield.name();
+                       msg->custom_value= customfield.value();
+                   }
+                   
+                   else
+                       
+                    {
+                         msg->has_custom_field =false;
+                           
+                    }
+                    
+                    
+                    
+                      pub_ptr->publish(msg);
                 }
 
                 cout << "Request Processed. " << endl << endl;
@@ -205,8 +328,9 @@ public:
             } // skip if there is no request
 
         };
-
-        timer_ = this->create_wall_timer(200_ms, callback);
+        
+        /*ToRemove :200_s*/ 
+        timer_ = this->create_wall_timer(20_s, callback);
          
     }
 
@@ -230,14 +354,6 @@ private:
 
 
 
-
-
-
-
-
-
-
-
 int main(int argc, char* argv[])
 {
 
@@ -256,17 +372,24 @@ int main(int argc, char* argv[])
     zmq_server_thread = new std::thread(std::bind(&ZMQ_Server::run, &ADAS_ZMQ_Server, android_msg));
 
     /////////////////////////////////////////////////////////////////////////
-    
-    
-   
-
     bool Pipeline_spin_request = false;
     bool printed = false;
+    
+    
+    /*To Remove*/
+     cout<<"set Pipeline_spin_request      ";
+     cin>>Pipeline_spin_request; 
+     cout<<endl;
+     int i=0;
+    /*until here*/
+    
+    
 
-    while(rclcpp::ok)
+    /* ToRemove: i and increment i*/
+    while(rclcpp::ok && i<3)
 
     {
-
+        
         if(Pipeline_spin_request) {
 
             // rclcpp::shutdow
@@ -281,15 +404,17 @@ int main(int argc, char* argv[])
 
             // Source_ADAS::inputmode_=config.source();
             // Source_ADAS::path_=config.source_folder();
+             const char* IP = android_msg->pipeline_config().ip().c_str();
 
              auto source_node = std::make_shared<Source_ADAS>(config.source(), config.source_folder(), "image");
              auto ADAS_command_server = std::make_shared<ADAS_CommandServer>(android_msg, executor);
              auto lanedetect_node = std::make_shared<LaneDetectNode>("image", "lanedetect_image");
-             auto streamer_node_with_ldw =
-                  std::make_shared<Streamer>("lanedetect_image", android_msg->pipeline_config().ip(), 5000);
+             //auto cardetect_node = std::make_shared<Detector>("image", "cardetect_image");
+             
+             //auto streamer_node_with_ldw = std::make_shared<Streamer>("lanedetect_image", IP, 5000);
                  
-             auto streamer_node_with_orignal=
-                  std::make_shared<Streamer>("image", android_msg->pipeline_config().ip(), 5000);
+             auto streamer_node_with_localIP=
+                  std::make_shared<Streamer>("lanedetect_image", "127.0.0.1", 5000);
             
             // auto streamer_node_with_ldw   =   std::make_shared<Streamer>("image", "127.0.0.1", 5000);
 
@@ -299,18 +424,15 @@ int main(int argc, char* argv[])
                 executor.add_node(ADAS_command_server);
                 executor.add_node(source_node);
                 executor.add_node(lanedetect_node);
-                executor.add_node(streamer_node_with_ldw);
+                executor.add_node(streamer_node_with_localIP);
 
             } else if(config.stream() == Stream::FCW) {
-                // executor.add_node(source_node);
-                // executor.add_node(streamer_node_with_source);
-                // executor.add_node(ADAS_command_server);
-            } else {
-
-                // executor.add_node(source_node);
-                // executor.add_node(streamer_node_with_source);
-                // executor.add_node(ADAS_command_server);
-            }
+                executor.add_node(ADAS_command_server);
+                executor.add_node(source_node);
+                executor.add_node(lanedetect_node);
+               // executor.add_node(cardetect_node);
+                executor.add_node(streamer_node_with_localIP);
+            } 
 
             ////////////////////////////////////////////////////////////////////////
 
@@ -345,7 +467,8 @@ int main(int argc, char* argv[])
             /* reset spin request */
             Pipeline_spin_request = false;
             printed=false;
-        
+            
+           
 
             ////////////////////////////////////////////////////////////////////////
         }
@@ -356,6 +479,10 @@ int main(int argc, char* argv[])
             cout << "======================================================" << endl;
             cout << "waiting for request form client .... " << endl << endl;
             printed = true;
+            
+            
+            //ToRemove:
+            i++;
         }
 
         { // protected against race condition
@@ -367,8 +494,19 @@ int main(int argc, char* argv[])
                 if(config.state() == State::PLAY) {
                     cout << " play requested---------------" << endl;
                     Pipeline_spin_request = true;
+      
                 }
             }
+            
+            
+               /*ToRemove*/
+                    cout<<"set Pipeline_spin_request      ";
+                    cin>>Pipeline_spin_request; 
+                    cout<<endl;
+                  /*unti here */  
+                    
+            
+            
         }
     }
     

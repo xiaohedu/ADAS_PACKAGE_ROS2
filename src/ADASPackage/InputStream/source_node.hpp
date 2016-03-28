@@ -15,7 +15,6 @@
 #include "std_msgs/msg/string.hpp"
 #include "std_msgs/msg/int32.hpp"
 #include "../Aux/adasdebugapplication.pb.h"
-#include "../Aux/adas_android_Interface.hpp";
 #include <adas_interfaces/msg/source_parameters.hpp>
 
 using namespace std::chrono;
@@ -82,10 +81,6 @@ public:
                     std::cout << "======================================================" << endl;
                     std::cout << "playing.... " << endl << endl;
                 }
-
-                //adas_interfaces::LDWParameters::Int["name"] = 10;
-                //adas_interfaces::LDWParameters::Int["name"] = 10;
-
             },
             rmw_qos_profile_default);
 
@@ -169,7 +164,7 @@ public:
             msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(frame_.step);
             msg->data.assign(frame_.datastart, frame_.dataend);
 
-            cv::imshow("Camera", frame_);
+            //cv::imshow("Camera", frame_);
 
             pub_->publish(msg); // Publish.
         }
