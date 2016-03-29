@@ -42,8 +42,8 @@ message Message {
 
 	message PipelineConfig {
 	  required string IP = 1;
-	  required Source source = 2 [default = CAMERA];
-	  required string source_folder = 3;
+	  optional Source source = 2 [default = CAMERA];
+	  optional string source_folder = 3;
 	  required State state = 4 [default = STOP];
 	  required Stream stream = 5 [default = LDW];
 	}

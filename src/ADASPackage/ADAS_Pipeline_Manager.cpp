@@ -394,11 +394,12 @@ int main(int argc, char* argv[])
              
              auto lanedetect_node = std::make_shared<LaneDetectNode>("image", "ldw_image");
              
-             //auto cardetect_node = std::make_shared<Detector>("image", "fcw_image");
+			auto detector_node = std::make_shared<App>("image", "detector_image");
+             //auto cardetect_node = std::make_shared<App>("image", "fcw_image");
              
              //auto streamer_node_with_ldw = std::make_shared<Streamer>("lanedetect_image", IP, 5000);
                  
-             auto streamer_node = std::make_shared<Streamer>("ldw_image","fcw_image", IP, 5000);
+             auto streamer_node = std::make_shared<Streamer>("ldw_image","detector_image", IP, 5000);
             
             // auto streamer_node_with_ldw   =   std::make_shared<Streamer>("image", "127.0.0.1", 5000);
 
@@ -409,6 +410,7 @@ int main(int argc, char* argv[])
                 executor.add_node(source_node_manual);
                 executor.add_node(lanedetect_node);
                 executor.add_node(streamer_node);
+		executor.add_node(detector_node);
 
            
 
