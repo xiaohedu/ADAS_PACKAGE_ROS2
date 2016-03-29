@@ -132,8 +132,8 @@ public:
 
         auto callback = [&client_request, &executor, src_captured_pub, ldw_captured_pub, fcw_captured_pub, this]() -> void {
             
-            /* ToRemove : uncomment next line */
-            //if(client_request.load() == true)
+           
+            if(client_request.load() == true)
 
             {
 
@@ -144,44 +144,11 @@ public:
 
                 std::lock_guard<std::mutex> lock(android_msg_mutex);
                 
-                
-                
-                
-                 /*To Remove */
-                 {
-                    adas_interfaces::msg::SourceParameters::UniquePtr msg(new adas_interfaces::msg::SourceParameters());
-                    auto pub_ptr = src_captured_pub.lock();
-                    if(!pub_ptr)
-                        return;
-                    int a;
-                    cout << "Enter the pipeline state"<<endl;
-                    cin>>a;
-                    cout<<endl;
-                     if(a == 1) {
-                        msg->paused = true;
-                        msg->stream = 0;
-                        pub_ptr->publish(msg);
-                    } else if(a==0) {
-                        msg->paused = false;
-                        msg->stream = 0;
-                        pub_ptr->publish(msg);
-                    } else if(a==2) {
-                        msg->stopped = true;
-                        msg->stream = 0;
-                        pub_ptr->publish(msg);
-                        executor.cancel();
-                    }
-                }
-                    /*Remove until here*/
-                    
-                    
-                    
                 /*SEND BACK THE PIPELINECONFIG*/
                 if(msg_android_->messagetype() == MessageType::PipeLine_Config) {
                     
-                    /*ToRemove : uncomment this section*/
-
-                    /*Message::PipelineConfig config = msg_android_->pipeline_config();
+                   
+                    Message::PipelineConfig config = msg_android_->pipeline_config();
 
                     adas_interfaces::msg::SourceParameters::UniquePtr msg(new adas_interfaces::msg::SourceParameters());
 
@@ -203,7 +170,7 @@ public:
                         pub_ptr->publish(msg);
                         executor.cancel();
                     }
-                     */
+                     
 
                 }
                     else
@@ -342,8 +309,7 @@ public:
 
         };
         
-        /*ToRemove :200_s*/ 
-        timer_ = this->create_wall_timer(10_s, callback);
+        timer_ = this->create_wall_timer(200_ms, callback);
          
     }
 
@@ -388,18 +354,8 @@ int main(int argc, char* argv[])
     bool Pipeline_spin_request = false;
     bool printed = false;
     
-    
-    /*To Remove*/
-     cout<<"set Pipeline_spin_request      ";
-     cin>>Pipeline_spin_request; 
-     cout<<endl;
-     int i=0;
-    /*until here*/
-    
-    
 
-    /* ToRemove: i and increment i*/
-    while(rclcpp::ok && i<3)
+    while(rclcpp::ok )
 
     {
         
@@ -415,38 +371,34 @@ int main(int argc, char* argv[])
             /////////////////////////////////////////////////////////////////////////
             /* Add relevent elements to ADAS Pipeline  */
 
-            // Source_ADAS::inputmode_=config.source();
-            // Source_ADAS::path_=config.source_folder();
              const char* IP = android_msg->pipeline_config().ip().c_str();
+             
+             
 
              //auto source_node = std::make_shared<Source_ADAS>(config.source(), config.source_folder(), "image");
-             auto source_node_manual = std::make_shared<Source_ADAS>(Source::CAMERA, "clips/lane_%d.png", "image");
+             auto source_node_manual = std::make_shared<Source_ADAS>(config.source(), config.source_folder(), "image");
+             
              auto ADAS_command_server = std::make_shared<ADAS_CommandServer>(android_msg, executor);
-             //auto lanedetect_node = std::make_shared<LaneDetectNode>("image", "lanedetect_image");
-             //auto cardetect_node = std::make_shared<Detector>("image", "cardetect_image");
+             
+             auto lanedetect_node = std::make_shared<LaneDetectNode>("image", "ldw_image");
+             
+             auto cardetect_node = std::make_shared<Detector>("image", "fcw_image");
              
              //auto streamer_node_with_ldw = std::make_shared<Streamer>("lanedetect_image", IP, 5000);
                  
-             auto streamer_node_with_localIP=
-                  std::make_shared<Streamer>("image","image", "127.0.0.1", 5000);
+             auto streamer_node = std::make_shared<Streamer>("ldw_image","fcw_image", IP, 5000);
             
             // auto streamer_node_with_ldw   =   std::make_shared<Streamer>("image", "127.0.0.1", 5000);
 
             // auto streamer_node_with_FCW     =   std::make_shared<Streamer>("image", args_streamer );
 
-            if(config.stream() == Stream::LDW) {
+            
                 executor.add_node(ADAS_command_server);
                 executor.add_node(source_node_manual);
-                //executor.add_node(lanedetect_node);
-                executor.add_node(streamer_node_with_localIP);
+                executor.add_node(lanedetect_node);
+                executor.add_node(streamer_node);
 
-            } else if(config.stream() == Stream::FCW) {
-                //executor.add_node(ADAS_command_server);
-                //executor.add_node(source_node);
-                //executor.add_node(lanedetect_node);
-               // executor.add_node(cardetect_node);
-                //executor.add_node(streamer_node_with_localIP);
-            } 
+           
 
             ////////////////////////////////////////////////////////////////////////
 
@@ -495,8 +447,7 @@ int main(int argc, char* argv[])
             printed = true;
             
             
-            //ToRemove:
-            i++;
+           
         }
 
         { // protected against race condition
@@ -512,14 +463,7 @@ int main(int argc, char* argv[])
                 }
             }
             
-            
-               /*ToRemove*/
-                    cout<<"set Pipeline_spin_request      ";
-                    cin>>Pipeline_spin_request; 
-                    cout<<endl;
-                  /*unti here */  
-                    
-            
+          
             
         }
     }

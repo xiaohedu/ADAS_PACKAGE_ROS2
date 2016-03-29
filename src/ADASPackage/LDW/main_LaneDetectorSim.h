@@ -37,7 +37,7 @@ struct LDW_Parameters
         , YAW_ANGLE(0)
         , PITCH_ANGLE(0.1)
         , coef_thetaMax(0)
-        , combo_id(0)
+        , combo_id(2)
     {
     }
     
@@ -189,7 +189,9 @@ public:
 
                 laneMat = cvMat;
 
-                if(param_.LANE_DETECTOR && !init) {
+                if(param_.LANE_DETECTOR && !init) 
+                    
+                {
                     
                     
                     
@@ -199,41 +201,44 @@ public:
                         char  fileName_test2[200];
                         strcpy(fileName_test2, "inputdata/LDWConfig/CameraInfo3.conf");
                     
-                switch (param_.combo_id) 
-                {
+                    switch (param_.combo_id) 
+                    {
 
-                    case 0: //IPM+HK
-                    LaneDetector_J::mcvInitLaneDetectorConf(fileName_test, &lanesConf);
-                //	MSG("Loaded lanes config file\n");
-                    LaneDetector_J::mcvInitCameraInfo(fileName_test2, &cameraInfo);
-                //	MSG("Loaded camera file\n");
-                    LaneDetector::InitlaneDetectorConf(laneMat, laneDetectorConf, 2, param_.coef_thetaMax); // KIT 1, ESIEE 2
-                    LaneDetector::InitLaneKalmanFilter(laneKalmanFilter, laneKalmanMeasureMat, laneKalmanIdx);
+                        case 0: //IPM+HK
+                        LaneDetector_J::mcvInitLaneDetectorConf(fileName_test, &lanesConf);
+                    //	MSG("Loaded lanes config file\n");
+                        LaneDetector_J::mcvInitCameraInfo(fileName_test2, &cameraInfo);
+                    //	MSG("Loaded camera file\n");
+                        LaneDetector::InitlaneDetectorConf(laneMat, laneDetectorConf, 2, param_.coef_thetaMax); // KIT 1, ESIEE 2
+                        LaneDetector::InitLaneKalmanFilter(laneKalmanFilter, laneKalmanMeasureMat, laneKalmanIdx);
 
-                    break;
-
-
-                    case 1:		//IPM+P
-                    LaneDetector_J::mcvInitLaneDetectorConf(fileName_test, &lanesConf);
-                //	MSG("Loaded lanes config file\n");
-                    LaneDetector_J::mcvInitCameraInfo(fileName_test2, &cameraInfo);
-                //	MSG("Loaded camera file\n");
-                    LaneDetector::InitlaneDetectorConf(laneMat, laneDetectorConf, 2, param_.coef_thetaMax); // KIT 1, ESIEE 2
-                    LaneDetector::InitLaneKalmanFilter(laneKalmanFilter, laneKalmanMeasureMat, laneKalmanIdx);
-                    break;
+                        break;
 
 
+                        case 1:		//IPM+P
+                        LaneDetector_J::mcvInitLaneDetectorConf(fileName_test, &lanesConf);
+                    //	MSG("Loaded lanes config file\n");
+                        LaneDetector_J::mcvInitCameraInfo(fileName_test2, &cameraInfo);
+                    //	MSG("Loaded camera file\n");
+                        LaneDetector::InitlaneDetectorConf(laneMat, laneDetectorConf, 2, param_.coef_thetaMax); // KIT 1, ESIEE 2
+                        LaneDetector::InitLaneKalmanFilter(laneKalmanFilter, laneKalmanMeasureMat, laneKalmanIdx);
+                        break;
 
-                    case 2:
-                    LaneDetector::InitlaneDetectorConf(laneMat, laneDetectorConf, 2, param_.coef_thetaMax); // KIT 1, ESIEE 2
-                    LaneDetector::InitLaneKalmanFilter(laneKalmanFilter, laneKalmanMeasureMat, laneKalmanIdx);
 
-                    break;
-                }
+
+                        case 2:
+                        LaneDetector::InitlaneDetectorConf(laneMat, laneDetectorConf, 2, param_.coef_thetaMax); // KIT 1, ESIEE 2
+                        LaneDetector::InitLaneKalmanFilter(laneKalmanFilter, laneKalmanMeasureMat, laneKalmanIdx);
+
+
+                        break;
+                    }
+                    
                     init = true; // poisonous
                 }
 
-                if(param_.LANE_DETECTOR) {
+                if(param_.LANE_DETECTOR)
+                {
 
                     startTime = (double)cv::getTickCount();
 
@@ -289,8 +294,11 @@ public:
 
 
                         case 2:
- 						 			LaneDetector::InitlaneDetectorConf(laneMat, laneDetectorConf, 2, param_.coef_thetaMax); // KIT 1, ESIEE 2
- 						 			LaneDetector::InitLaneKalmanFilter(laneKalmanFilter, laneKalmanMeasureMat, laneKalmanIdx);
+                        
+                        
+                        ProcessLaneImage(laneMat, laneDetectorConf, startTime, laneKalmanFilter, laneKalmanMeasureMat, laneKalmanIdx, hfLanes, lastHfLanes,
+										lastLateralOffset, lateralOffset, isChangeLane, detectLaneFlag,  idx, execTime, preHfLanes, changeDone, param_.YAW_ANGLE, param_.PITCH_ANGLE);
+                                        
                                     set_now(msg->header.stamp);
                                     msg->header.frame_id = "laneMat";
                                     msg->height = laneMat.cols;
