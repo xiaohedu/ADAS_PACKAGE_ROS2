@@ -14,7 +14,8 @@
 #include "../Aux/common.hpp"
 #include <adas_interfaces/msg/source_parameters.hpp>
 #include <adas_interfaces/msg/ldw_parameters.hpp>
-
+#include "LaneDetector/CameraInfoOpt.h"
+#include "LaneDetector/LaneDetectorOpt.h"
 #include <stdexcept>
 
 /* Time */
@@ -36,7 +37,7 @@ struct LDW_Parameters
         : LANE_DETECTOR(true)
         , YAW_ANGLE(0)
         , PITCH_ANGLE(0.1)
-        , coef_thetaMax(0)
+        , coef_thetaMax(0.5)
         , combo_id(2)
     {
     }
@@ -146,7 +147,7 @@ public:
             cout << "coef_thetaMax: " << param_.coef_thetaMax  << endl;
             cout << "Combination ID: " << param_.combo_id << endl<<endl;
             std::cout << "======================================================" << endl;
-            std::cout << "                LDW Configured"<<endl << endl << endl;
+            std::cout << "LDW Configured"<<endl << endl << endl;
 
             },
             rmw_qos_profile_default);
@@ -264,7 +265,7 @@ public:
                         msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(IPM_OUT.step);
                         msg->data.assign(IPM_OUT.datastart, IPM_OUT.dataend);
                         pub_ptr->publish(msg); //Publish it along.
-                         
+                         cv::imshow("IPM_OUT", IPM_OUT);
                         break;
 
 
@@ -273,7 +274,7 @@ public:
                         ProcessLaneImage_IPM(laneMat, laneDetectorConf, startTime, laneKalmanFilter, laneKalmanMeasureMat, laneKalmanIdx, hfLanes, lastHfLanes,
                         lastLateralOffset, lateralOffset, isChangeLane, detectLaneFlag,  idx, execTime, preHfLanes, changeDone, param_.YAW_ANGLE, param_.PITCH_ANGLE,
                         cameraInfo,  lanesConf, IPM_OUT, IPM_cont, particle_detect, particle_track, param_.combo_id);
-                            //  cv::imshow("IPM_OUT", IPM_OUT);
+                        
                             //  cv::imshow("IPM_CONTOUR", IPM_cont);
                             //cv::imshow("PARTICLE_DETECT", particle_detect);
                             //cv::imshow("PARTICLE_TRACK", particle_track);
@@ -298,7 +299,9 @@ public:
                         
                         ProcessLaneImage(laneMat, laneDetectorConf, startTime, laneKalmanFilter, laneKalmanMeasureMat, laneKalmanIdx, hfLanes, lastHfLanes,
 										lastLateralOffset, lateralOffset, isChangeLane, detectLaneFlag,  idx, execTime, preHfLanes, changeDone, param_.YAW_ANGLE, param_.PITCH_ANGLE);
-                                        
+  
+                                    
+                                   /*// laneMat.convertTo(laneMat, CV_8U);
                                     set_now(msg->header.stamp);
                                     msg->header.frame_id = "laneMat";
                                     msg->height = laneMat.cols;
@@ -307,10 +310,16 @@ public:
                                     msg->is_bigendian = false;
                                     msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(laneMat.step);
                                     msg->data.assign(laneMat.datastart, laneMat.dataend);
-                                    //cv::imshow("LAneMat", laneMat);
+                                    */
+                                    cv::imshow("LaneSystem", laneMat);
                                     pub_ptr->publish(msg); // Publish it along.
-
                         break;
+                        
+                        
+                      case 3:  
+                        pub_ptr->publish(msg); // Publish it along.
+
+                        
                     }
                 }
                 if(IMAGE_RECORD) {
@@ -328,7 +337,7 @@ public:
 
                  //cv::imshow("Lane System", laneMat);
                 // cv::moveWindow("Lane System", 790, 30);
-                // cv::waitKey(1);
+                 //cv::waitKey(1);
 
                 
 

@@ -57,6 +57,7 @@ public:
 
                 if(msg) {
                     this->source_.paused.store(msg->paused);
+                    this->source_.stopped.store(msg->stopped);
                 }
 
                 if(this->source_.stopped.load() == true) {

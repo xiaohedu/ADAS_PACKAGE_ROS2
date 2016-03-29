@@ -7,11 +7,9 @@
 #include "LaneDetector/LaneDetectorTools.h"
 #include "LaneDetector/GenerateLaneIndicators.h"
 #include "LaneDetector/IPMTransformation.h"
-#include "LaneDetector/CameraInfoOpt.h"
-#include "LaneDetector/LaneDetectorOpt.h"
-#include "LaneDetector/IPMTransJoost.hh"
-//extern "C" {
 
+//extern "C" {
+#include "LaneDetector/IPMTransJoost.hh"
 //}
 
 //#include "cmdline.h"

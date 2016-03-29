@@ -132,7 +132,7 @@ public:
 
         auto callback = [&client_request, &executor, src_captured_pub, ldw_captured_pub, fcw_captured_pub, this]() -> void {
             
-           
+
             if(client_request.load() == true)
 
             {
@@ -144,10 +144,17 @@ public:
 
                 std::lock_guard<std::mutex> lock(android_msg_mutex);
                 
+                
+                
+    
+                    
+                    
+                    
                 /*SEND BACK THE PIPELINECONFIG*/
                 if(msg_android_->messagetype() == MessageType::PipeLine_Config) {
                     
-                   
+             
+
                     Message::PipelineConfig config = msg_android_->pipeline_config();
 
                     adas_interfaces::msg::SourceParameters::UniquePtr msg(new adas_interfaces::msg::SourceParameters());
@@ -162,10 +169,13 @@ public:
                     if(config.state() == State::PAUSE) {
                         msg->paused = true;
                         pub_ptr->publish(msg);
-                    } else if(config.state() == State::PLAY) {
+                    } 
+                    
+                    if(config.state() == State::PLAY) {
                         msg->paused = false;
                         pub_ptr->publish(msg);
-                    } else if(config.state() == State::STOP) {
+                    }
+                    if(config.state() == State::STOP) {
                         msg->stopped = true;
                         pub_ptr->publish(msg);
                         executor.cancel();
@@ -354,8 +364,10 @@ int main(int argc, char* argv[])
     bool Pipeline_spin_request = false;
     bool printed = false;
     
+   
 
-    while(rclcpp::ok )
+    /* ToRemove: i and increment i*/
+    while(rclcpp::ok)
 
     {
         
@@ -382,7 +394,7 @@ int main(int argc, char* argv[])
              
              auto lanedetect_node = std::make_shared<LaneDetectNode>("image", "ldw_image");
              
-             auto cardetect_node = std::make_shared<Detector>("image", "fcw_image");
+             //auto cardetect_node = std::make_shared<Detector>("image", "fcw_image");
              
              //auto streamer_node_with_ldw = std::make_shared<Streamer>("lanedetect_image", IP, 5000);
                  

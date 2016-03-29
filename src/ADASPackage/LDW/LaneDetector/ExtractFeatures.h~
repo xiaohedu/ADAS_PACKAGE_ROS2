@@ -15,7 +15,6 @@ namespace LaneDetector{
     //! nonfree: SIFT, SURF
     //! legacy: RandomizedTree
     //! ocl: BruteForceMatcher, HOGDescriptor
-
     void ExtractFeatures(const cv::Mat &mat, 
                          const std::string &detectorMethod, std::vector<cv::KeyPoint> &keypoints,
                          const std::string &extractorMethod, cv::Mat &descriptor, cv::Mat &outMat);
