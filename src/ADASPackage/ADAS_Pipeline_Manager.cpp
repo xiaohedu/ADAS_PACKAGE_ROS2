@@ -164,19 +164,21 @@ public:
                         return;
 
                     msg->stream = static_cast<int>(config.stream());
-                    
 
                     if(config.state() == State::PAUSE) {
                         msg->paused = true;
+						msg->stopped = false;
                         pub_ptr->publish(msg);
                     } 
                     
                     if(config.state() == State::PLAY) {
                         msg->paused = false;
+						msg->stopped = false;
                         pub_ptr->publish(msg);
                     }
                     if(config.state() == State::STOP) {
                         msg->stopped = true;
+						msg->paused = false;
                         pub_ptr->publish(msg);
                         executor.cancel();
                     }
@@ -268,6 +270,7 @@ public:
                     msg->make_gray = config.grayinit();
                     msg->scale = config.hogscaleinit();
                     msg->hit_threshold = config.hitthreshold();
+					msg->processor  = config.processor();
                     
                     
                      if (config.has_custom())
@@ -366,12 +369,13 @@ int main(int argc, char* argv[])
     
    
 
-    /* ToRemove: i and increment i*/
     while(rclcpp::ok)
 
     {
         
-        if(Pipeline_spin_request) {
+        if(Pipeline_spin_request) 
+			
+	{
 
             // rclcpp::shutdow
 
@@ -394,7 +398,7 @@ int main(int argc, char* argv[])
              
              auto lanedetect_node = std::make_shared<LaneDetectNode>("image", "ldw_image");
              
-			auto detector_node = std::make_shared<App>("image", "detector_image");
+			 auto detector_node = std::make_shared<Detector>("image", "detector_image");
              //auto cardetect_node = std::make_shared<App>("image", "fcw_image");
              
              //auto streamer_node_with_ldw = std::make_shared<Streamer>("lanedetect_image", IP, 5000);
@@ -410,7 +414,7 @@ int main(int argc, char* argv[])
                 executor.add_node(source_node_manual);
                 executor.add_node(lanedetect_node);
                 executor.add_node(streamer_node);
-		executor.add_node(detector_node);
+				executor.add_node(detector_node);
 
            
 
@@ -453,15 +457,13 @@ int main(int argc, char* argv[])
             ////////////////////////////////////////////////////////////////////////
         }
 
-        if(!printed) {
+        if(!printed)
+		{
             cout << "======================================================" << endl;
             cout << "	   Initiate Pipeline from the Android Client" << endl;
             cout << "======================================================" << endl;
             cout << "waiting for request form client .... " << endl << endl;
             printed = true;
-            
-            
-           
         }
 
         { // protected against race condition

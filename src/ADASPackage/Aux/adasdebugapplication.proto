@@ -64,14 +64,13 @@ message Message {
 
 
 	message FCWConfig {
-          required bool car_detector = 1;
-	  required bool processor = 2;
-	  required bool GrayInit = 3;
-	  required double HOGscaleInit = 4;
-	  required int32 LevelsCount = 5;
-	  required int32 HOGgroupThresholdInit = 6;
-	  required double HitThreshold = 7;
-	  optional CustomField custom = 8;
+	  required bool processor = 1;
+	  required bool GrayInit = 2;
+	  required double HOGscaleInit = 3;
+	  required int32 LevelsCount = 4;
+	  required int32 HOGgroupThresholdInit = 5;
+	  required double HitThreshold = 6;
+	  optional CustomField custom = 7;
 
 	}
 	optional FCWConfig fcw_config = 4;

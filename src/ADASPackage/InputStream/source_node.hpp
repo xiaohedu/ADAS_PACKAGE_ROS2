@@ -35,7 +35,6 @@ struct Source_Parameters
 };
 
 
-
 class Source_ADAS : public rclcpp::Node, public std::enable_shared_from_this<Source_ADAS>
 {
 
@@ -56,6 +55,7 @@ public:
             [this](adas_interfaces::msg::SourceParameters::UniquePtr msg) {
 
                 if(msg) {
+					
                     this->source_.paused.store(msg->paused);
                     this->source_.stopped.store(msg->stopped);
                 }
@@ -199,8 +199,8 @@ public:
             
               if (! frame_.data)
             {
-                source_.stopped.store(true);
-                break;
+               source_.stopped.store(true);
+			   Idx=0;
             }
             
             
@@ -231,6 +231,7 @@ public:
             pub_->publish(msg);
             Idx++;
         }
+		
     }
 
     std::chrono::high_resolution_clock Clock;

@@ -108,8 +108,7 @@ void protobuf_AssignDesc_adasdebugapplication_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(Message_LDWConfig));
   Message_FCWConfig_descriptor_ = Message_descriptor_->nested_type(2);
-  static const int Message_FCWConfig_offsets_[8] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_FCWConfig, car_detector_),
+  static const int Message_FCWConfig_offsets_[7] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_FCWConfig, processor_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_FCWConfig, grayinit_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Message_FCWConfig, hogscaleinit_),
@@ -198,7 +197,7 @@ void protobuf_AddDesc_adasdebugapplication_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\032adasdebugapplication.proto\022\026ADAS_Debug"
-    "_Application\"\337\007\n\007Message\0228\n\013messagetype\030"
+    "_Application\"\311\007\n\007Message\0228\n\013messagetype\030"
     "\001 \002(\0162#.ADAS_Debug_Application.MessageTy"
     "pe\022G\n\017pipeline_config\030\002 \001(\0132..ADAS_Debug"
     "_Application.Message.PipelineConfig\022=\n\nl"
@@ -215,22 +214,21 @@ void protobuf_AddDesc_adasdebugapplication_2eproto() {
     "h_angle\030\003 \002(\001\022\025\n\rCoef_thetaMax\030\004 \001(\001\022\035\n\025"
     "detection_combination\030\005 \001(\005\022;\n\006custom\030\006 "
     "\001(\0132+.ADAS_Debug_Application.Message.Cus"
-    "tomField\032\343\001\n\tFCWConfig\022\024\n\014car_detector\030\001"
-    " \002(\010\022\021\n\tprocessor\030\002 \002(\010\022\020\n\010GrayInit\030\003 \002("
-    "\010\022\024\n\014HOGscaleInit\030\004 \002(\001\022\023\n\013LevelsCount\030\005"
-    " \002(\005\022\035\n\025HOGgroupThresholdInit\030\006 \002(\005\022\024\n\014H"
-    "itThreshold\030\007 \002(\001\022;\n\006custom\030\010 \001(\0132+.ADAS"
-    "_Debug_Application.Message.CustomField\032V"
-    "\n\013CustomField\022\014\n\004name\030\001 \002(\t\022*\n\004type\030\002 \002("
-    "\0162\034.ADAS_Debug_Application.Type\022\r\n\005value"
-    "\030\003 \002(\t*B\n\013MessageType\022\023\n\017PipeLine_Config"
-    "\020\000\022\016\n\nLDW_Config\020\001\022\016\n\nFCW_Config\020\002*&\n\005St"
-    "ate\022\010\n\004PLAY\020\000\022\010\n\004STOP\020\001\022\t\n\005PAUSE\020\002*\032\n\006St"
-    "ream\022\007\n\003LDW\020\000\022\007\n\003FCW\020\001* \n\006Source\022\n\n\006CAME"
-    "RA\020\000\022\n\n\006FOLDER\020\001*4\n\004Type\022\007\n\003Int\020\000\022\n\n\006Dou"
-    "ble\020\001\022\n\n\006String\020\002\022\013\n\007Boolean\020\003B8\n com.gs"
-    "t_sdk_tutorials.tutorial_5B\024AdasDebugApp"
-    "lication", 1328);
+    "tomField\032\315\001\n\tFCWConfig\022\021\n\tprocessor\030\001 \002("
+    "\010\022\020\n\010GrayInit\030\002 \002(\010\022\024\n\014HOGscaleInit\030\003 \002("
+    "\001\022\023\n\013LevelsCount\030\004 \002(\005\022\035\n\025HOGgroupThresh"
+    "oldInit\030\005 \002(\005\022\024\n\014HitThreshold\030\006 \002(\001\022;\n\006c"
+    "ustom\030\007 \001(\0132+.ADAS_Debug_Application.Mes"
+    "sage.CustomField\032V\n\013CustomField\022\014\n\004name\030"
+    "\001 \002(\t\022*\n\004type\030\002 \002(\0162\034.ADAS_Debug_Applica"
+    "tion.Type\022\r\n\005value\030\003 \002(\t*B\n\013MessageType\022"
+    "\023\n\017PipeLine_Config\020\000\022\016\n\nLDW_Config\020\001\022\016\n\n"
+    "FCW_Config\020\002*&\n\005State\022\010\n\004PLAY\020\000\022\010\n\004STOP\020"
+    "\001\022\t\n\005PAUSE\020\002*\032\n\006Stream\022\007\n\003LDW\020\000\022\007\n\003FCW\020\001"
+    "* \n\006Source\022\n\n\006CAMERA\020\000\022\n\n\006FOLDER\020\001*4\n\004Ty"
+    "pe\022\007\n\003Int\020\000\022\n\n\006Double\020\001\022\n\n\006String\020\002\022\013\n\007B"
+    "oolean\020\003B8\n com.gst_sdk_tutorials.tutori"
+    "al_5B\024AdasDebugApplication", 1306);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "adasdebugapplication.proto", &protobuf_RegisterTypes);
   Message::default_instance_ = new Message();
@@ -1200,7 +1198,6 @@ void Message_LDWConfig::Swap(Message_LDWConfig* other) {
 // -------------------------------------------------------------------
 
 #ifndef _MSC_VER
-const int Message_FCWConfig::kCarDetectorFieldNumber;
 const int Message_FCWConfig::kProcessorFieldNumber;
 const int Message_FCWConfig::kGrayInitFieldNumber;
 const int Message_FCWConfig::kHOGscaleInitFieldNumber;
@@ -1229,7 +1226,6 @@ Message_FCWConfig::Message_FCWConfig(const Message_FCWConfig& from)
 
 void Message_FCWConfig::SharedCtor() {
   _cached_size_ = 0;
-  car_detector_ = false;
   processor_ = false;
   grayinit_ = false;
   hogscaleinit_ = 0;
@@ -1283,8 +1279,8 @@ void Message_FCWConfig::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  if (_has_bits_[0 / 32] & 255) {
-    ZR_(car_detector_, hitthreshold_);
+  if (_has_bits_[0 / 32] & 127) {
+    ZR_(processor_, hitthreshold_);
     hoggroupthresholdinit_ = 0;
     if (has_custom()) {
       if (custom_ != NULL) custom_->::ADAS_Debug_Application::Message_CustomField::Clear();
@@ -1308,24 +1304,9 @@ bool Message_FCWConfig::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required bool car_detector = 1;
+      // required bool processor = 1;
       case 1: {
         if (tag == 8) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
-                 input, &car_detector_)));
-          set_has_car_detector();
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(16)) goto parse_processor;
-        break;
-      }
-
-      // required bool processor = 2;
-      case 2: {
-        if (tag == 16) {
-         parse_processor:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
                  input, &processor_)));
@@ -1333,13 +1314,13 @@ bool Message_FCWConfig::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_GrayInit;
+        if (input->ExpectTag(16)) goto parse_GrayInit;
         break;
       }
 
-      // required bool GrayInit = 3;
-      case 3: {
-        if (tag == 24) {
+      // required bool GrayInit = 2;
+      case 2: {
+        if (tag == 16) {
          parse_GrayInit:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -1348,13 +1329,13 @@ bool Message_FCWConfig::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(33)) goto parse_HOGscaleInit;
+        if (input->ExpectTag(25)) goto parse_HOGscaleInit;
         break;
       }
 
-      // required double HOGscaleInit = 4;
-      case 4: {
-        if (tag == 33) {
+      // required double HOGscaleInit = 3;
+      case 3: {
+        if (tag == 25) {
          parse_HOGscaleInit:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
@@ -1363,13 +1344,13 @@ bool Message_FCWConfig::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(40)) goto parse_LevelsCount;
+        if (input->ExpectTag(32)) goto parse_LevelsCount;
         break;
       }
 
-      // required int32 LevelsCount = 5;
-      case 5: {
-        if (tag == 40) {
+      // required int32 LevelsCount = 4;
+      case 4: {
+        if (tag == 32) {
          parse_LevelsCount:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -1378,13 +1359,13 @@ bool Message_FCWConfig::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(48)) goto parse_HOGgroupThresholdInit;
+        if (input->ExpectTag(40)) goto parse_HOGgroupThresholdInit;
         break;
       }
 
-      // required int32 HOGgroupThresholdInit = 6;
-      case 6: {
-        if (tag == 48) {
+      // required int32 HOGgroupThresholdInit = 5;
+      case 5: {
+        if (tag == 40) {
          parse_HOGgroupThresholdInit:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
@@ -1393,13 +1374,13 @@ bool Message_FCWConfig::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(57)) goto parse_HitThreshold;
+        if (input->ExpectTag(49)) goto parse_HitThreshold;
         break;
       }
 
-      // required double HitThreshold = 7;
-      case 7: {
-        if (tag == 57) {
+      // required double HitThreshold = 6;
+      case 6: {
+        if (tag == 49) {
          parse_HitThreshold:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    double, ::google::protobuf::internal::WireFormatLite::TYPE_DOUBLE>(
@@ -1408,13 +1389,13 @@ bool Message_FCWConfig::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(66)) goto parse_custom;
+        if (input->ExpectTag(58)) goto parse_custom;
         break;
       }
 
-      // optional .ADAS_Debug_Application.Message.CustomField custom = 8;
-      case 8: {
-        if (tag == 66) {
+      // optional .ADAS_Debug_Application.Message.CustomField custom = 7;
+      case 7: {
+        if (tag == 58) {
          parse_custom:
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
                input, mutable_custom()));
@@ -1450,45 +1431,40 @@ failure:
 void Message_FCWConfig::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:ADAS_Debug_Application.Message.FCWConfig)
-  // required bool car_detector = 1;
-  if (has_car_detector()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->car_detector(), output);
-  }
-
-  // required bool processor = 2;
+  // required bool processor = 1;
   if (has_processor()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->processor(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(1, this->processor(), output);
   }
 
-  // required bool GrayInit = 3;
+  // required bool GrayInit = 2;
   if (has_grayinit()) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->grayinit(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->grayinit(), output);
   }
 
-  // required double HOGscaleInit = 4;
+  // required double HOGscaleInit = 3;
   if (has_hogscaleinit()) {
-    ::google::protobuf::internal::WireFormatLite::WriteDouble(4, this->hogscaleinit(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(3, this->hogscaleinit(), output);
   }
 
-  // required int32 LevelsCount = 5;
+  // required int32 LevelsCount = 4;
   if (has_levelscount()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->levelscount(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->levelscount(), output);
   }
 
-  // required int32 HOGgroupThresholdInit = 6;
+  // required int32 HOGgroupThresholdInit = 5;
   if (has_hoggroupthresholdinit()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(6, this->hoggroupthresholdinit(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->hoggroupthresholdinit(), output);
   }
 
-  // required double HitThreshold = 7;
+  // required double HitThreshold = 6;
   if (has_hitthreshold()) {
-    ::google::protobuf::internal::WireFormatLite::WriteDouble(7, this->hitthreshold(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteDouble(6, this->hitthreshold(), output);
   }
 
-  // optional .ADAS_Debug_Application.Message.CustomField custom = 8;
+  // optional .ADAS_Debug_Application.Message.CustomField custom = 7;
   if (has_custom()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      8, this->custom(), output);
+      7, this->custom(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -1501,46 +1477,41 @@ void Message_FCWConfig::SerializeWithCachedSizes(
 ::google::protobuf::uint8* Message_FCWConfig::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:ADAS_Debug_Application.Message.FCWConfig)
-  // required bool car_detector = 1;
-  if (has_car_detector()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(1, this->car_detector(), target);
-  }
-
-  // required bool processor = 2;
+  // required bool processor = 1;
   if (has_processor()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(2, this->processor(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(1, this->processor(), target);
   }
 
-  // required bool GrayInit = 3;
+  // required bool GrayInit = 2;
   if (has_grayinit()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->grayinit(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(2, this->grayinit(), target);
   }
 
-  // required double HOGscaleInit = 4;
+  // required double HOGscaleInit = 3;
   if (has_hogscaleinit()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(4, this->hogscaleinit(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(3, this->hogscaleinit(), target);
   }
 
-  // required int32 LevelsCount = 5;
+  // required int32 LevelsCount = 4;
   if (has_levelscount()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->levelscount(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->levelscount(), target);
   }
 
-  // required int32 HOGgroupThresholdInit = 6;
+  // required int32 HOGgroupThresholdInit = 5;
   if (has_hoggroupthresholdinit()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(6, this->hoggroupthresholdinit(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->hoggroupthresholdinit(), target);
   }
 
-  // required double HitThreshold = 7;
+  // required double HitThreshold = 6;
   if (has_hitthreshold()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(7, this->hitthreshold(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteDoubleToArray(6, this->hitthreshold(), target);
   }
 
-  // optional .ADAS_Debug_Application.Message.CustomField custom = 8;
+  // optional .ADAS_Debug_Application.Message.CustomField custom = 7;
   if (has_custom()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        8, this->custom(), target);
+        7, this->custom(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -1555,46 +1526,41 @@ int Message_FCWConfig::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required bool car_detector = 1;
-    if (has_car_detector()) {
-      total_size += 1 + 1;
-    }
-
-    // required bool processor = 2;
+    // required bool processor = 1;
     if (has_processor()) {
       total_size += 1 + 1;
     }
 
-    // required bool GrayInit = 3;
+    // required bool GrayInit = 2;
     if (has_grayinit()) {
       total_size += 1 + 1;
     }
 
-    // required double HOGscaleInit = 4;
+    // required double HOGscaleInit = 3;
     if (has_hogscaleinit()) {
       total_size += 1 + 8;
     }
 
-    // required int32 LevelsCount = 5;
+    // required int32 LevelsCount = 4;
     if (has_levelscount()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->levelscount());
     }
 
-    // required int32 HOGgroupThresholdInit = 6;
+    // required int32 HOGgroupThresholdInit = 5;
     if (has_hoggroupthresholdinit()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::Int32Size(
           this->hoggroupthresholdinit());
     }
 
-    // required double HitThreshold = 7;
+    // required double HitThreshold = 6;
     if (has_hitthreshold()) {
       total_size += 1 + 8;
     }
 
-    // optional .ADAS_Debug_Application.Message.CustomField custom = 8;
+    // optional .ADAS_Debug_Application.Message.CustomField custom = 7;
     if (has_custom()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
@@ -1628,9 +1594,6 @@ void Message_FCWConfig::MergeFrom(const ::google::protobuf::Message& from) {
 void Message_FCWConfig::MergeFrom(const Message_FCWConfig& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_car_detector()) {
-      set_car_detector(from.car_detector());
-    }
     if (from.has_processor()) {
       set_processor(from.processor());
     }
@@ -1669,7 +1632,7 @@ void Message_FCWConfig::CopyFrom(const Message_FCWConfig& from) {
 }
 
 bool Message_FCWConfig::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000007f) != 0x0000007f) return false;
+  if ((_has_bits_[0] & 0x0000003f) != 0x0000003f) return false;
 
   if (has_custom()) {
     if (!this->custom().IsInitialized()) return false;
@@ -1679,7 +1642,6 @@ bool Message_FCWConfig::IsInitialized() const {
 
 void Message_FCWConfig::Swap(Message_FCWConfig* other) {
   if (other != this) {
-    std::swap(car_detector_, other->car_detector_);
     std::swap(processor_, other->processor_);
     std::swap(grayinit_, other->grayinit_);
     std::swap(hogscaleinit_, other->hogscaleinit_);

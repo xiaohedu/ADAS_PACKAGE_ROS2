@@ -454,59 +454,52 @@ class Message_FCWConfig : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required bool car_detector = 1;
-  inline bool has_car_detector() const;
-  inline void clear_car_detector();
-  static const int kCarDetectorFieldNumber = 1;
-  inline bool car_detector() const;
-  inline void set_car_detector(bool value);
-
-  // required bool processor = 2;
+  // required bool processor = 1;
   inline bool has_processor() const;
   inline void clear_processor();
-  static const int kProcessorFieldNumber = 2;
+  static const int kProcessorFieldNumber = 1;
   inline bool processor() const;
   inline void set_processor(bool value);
 
-  // required bool GrayInit = 3;
+  // required bool GrayInit = 2;
   inline bool has_grayinit() const;
   inline void clear_grayinit();
-  static const int kGrayInitFieldNumber = 3;
+  static const int kGrayInitFieldNumber = 2;
   inline bool grayinit() const;
   inline void set_grayinit(bool value);
 
-  // required double HOGscaleInit = 4;
+  // required double HOGscaleInit = 3;
   inline bool has_hogscaleinit() const;
   inline void clear_hogscaleinit();
-  static const int kHOGscaleInitFieldNumber = 4;
+  static const int kHOGscaleInitFieldNumber = 3;
   inline double hogscaleinit() const;
   inline void set_hogscaleinit(double value);
 
-  // required int32 LevelsCount = 5;
+  // required int32 LevelsCount = 4;
   inline bool has_levelscount() const;
   inline void clear_levelscount();
-  static const int kLevelsCountFieldNumber = 5;
+  static const int kLevelsCountFieldNumber = 4;
   inline ::google::protobuf::int32 levelscount() const;
   inline void set_levelscount(::google::protobuf::int32 value);
 
-  // required int32 HOGgroupThresholdInit = 6;
+  // required int32 HOGgroupThresholdInit = 5;
   inline bool has_hoggroupthresholdinit() const;
   inline void clear_hoggroupthresholdinit();
-  static const int kHOGgroupThresholdInitFieldNumber = 6;
+  static const int kHOGgroupThresholdInitFieldNumber = 5;
   inline ::google::protobuf::int32 hoggroupthresholdinit() const;
   inline void set_hoggroupthresholdinit(::google::protobuf::int32 value);
 
-  // required double HitThreshold = 7;
+  // required double HitThreshold = 6;
   inline bool has_hitthreshold() const;
   inline void clear_hitthreshold();
-  static const int kHitThresholdFieldNumber = 7;
+  static const int kHitThresholdFieldNumber = 6;
   inline double hitthreshold() const;
   inline void set_hitthreshold(double value);
 
-  // optional .ADAS_Debug_Application.Message.CustomField custom = 8;
+  // optional .ADAS_Debug_Application.Message.CustomField custom = 7;
   inline bool has_custom() const;
   inline void clear_custom();
-  static const int kCustomFieldNumber = 8;
+  static const int kCustomFieldNumber = 7;
   inline const ::ADAS_Debug_Application::Message_CustomField& custom() const;
   inline ::ADAS_Debug_Application::Message_CustomField* mutable_custom();
   inline ::ADAS_Debug_Application::Message_CustomField* release_custom();
@@ -514,8 +507,6 @@ class Message_FCWConfig : public ::google::protobuf::Message {
 
   // @@protoc_insertion_point(class_scope:ADAS_Debug_Application.Message.FCWConfig)
  private:
-  inline void set_has_car_detector();
-  inline void clear_has_car_detector();
   inline void set_has_processor();
   inline void clear_has_processor();
   inline void set_has_grayinit();
@@ -535,7 +526,6 @@ class Message_FCWConfig : public ::google::protobuf::Message {
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  bool car_detector_;
   bool processor_;
   bool grayinit_;
   ::google::protobuf::int32 levelscount_;
@@ -1182,39 +1172,15 @@ inline void Message_LDWConfig::set_allocated_custom(::ADAS_Debug_Application::Me
 
 // Message_FCWConfig
 
-// required bool car_detector = 1;
-inline bool Message_FCWConfig::has_car_detector() const {
+// required bool processor = 1;
+inline bool Message_FCWConfig::has_processor() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void Message_FCWConfig::set_has_car_detector() {
+inline void Message_FCWConfig::set_has_processor() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void Message_FCWConfig::clear_has_car_detector() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void Message_FCWConfig::clear_car_detector() {
-  car_detector_ = false;
-  clear_has_car_detector();
-}
-inline bool Message_FCWConfig::car_detector() const {
-  // @@protoc_insertion_point(field_get:ADAS_Debug_Application.Message.FCWConfig.car_detector)
-  return car_detector_;
-}
-inline void Message_FCWConfig::set_car_detector(bool value) {
-  set_has_car_detector();
-  car_detector_ = value;
-  // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.car_detector)
-}
-
-// required bool processor = 2;
-inline bool Message_FCWConfig::has_processor() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void Message_FCWConfig::set_has_processor() {
-  _has_bits_[0] |= 0x00000002u;
-}
 inline void Message_FCWConfig::clear_has_processor() {
-  _has_bits_[0] &= ~0x00000002u;
+  _has_bits_[0] &= ~0x00000001u;
 }
 inline void Message_FCWConfig::clear_processor() {
   processor_ = false;
@@ -1230,15 +1196,15 @@ inline void Message_FCWConfig::set_processor(bool value) {
   // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.processor)
 }
 
-// required bool GrayInit = 3;
+// required bool GrayInit = 2;
 inline bool Message_FCWConfig::has_grayinit() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+  return (_has_bits_[0] & 0x00000002u) != 0;
 }
 inline void Message_FCWConfig::set_has_grayinit() {
-  _has_bits_[0] |= 0x00000004u;
+  _has_bits_[0] |= 0x00000002u;
 }
 inline void Message_FCWConfig::clear_has_grayinit() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline void Message_FCWConfig::clear_grayinit() {
   grayinit_ = false;
@@ -1254,15 +1220,15 @@ inline void Message_FCWConfig::set_grayinit(bool value) {
   // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.GrayInit)
 }
 
-// required double HOGscaleInit = 4;
+// required double HOGscaleInit = 3;
 inline bool Message_FCWConfig::has_hogscaleinit() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 inline void Message_FCWConfig::set_has_hogscaleinit() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000004u;
 }
 inline void Message_FCWConfig::clear_has_hogscaleinit() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void Message_FCWConfig::clear_hogscaleinit() {
   hogscaleinit_ = 0;
@@ -1278,15 +1244,15 @@ inline void Message_FCWConfig::set_hogscaleinit(double value) {
   // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.HOGscaleInit)
 }
 
-// required int32 LevelsCount = 5;
+// required int32 LevelsCount = 4;
 inline bool Message_FCWConfig::has_levelscount() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void Message_FCWConfig::set_has_levelscount() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void Message_FCWConfig::clear_has_levelscount() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void Message_FCWConfig::clear_levelscount() {
   levelscount_ = 0;
@@ -1302,15 +1268,15 @@ inline void Message_FCWConfig::set_levelscount(::google::protobuf::int32 value) 
   // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.LevelsCount)
 }
 
-// required int32 HOGgroupThresholdInit = 6;
+// required int32 HOGgroupThresholdInit = 5;
 inline bool Message_FCWConfig::has_hoggroupthresholdinit() const {
-  return (_has_bits_[0] & 0x00000020u) != 0;
+  return (_has_bits_[0] & 0x00000010u) != 0;
 }
 inline void Message_FCWConfig::set_has_hoggroupthresholdinit() {
-  _has_bits_[0] |= 0x00000020u;
+  _has_bits_[0] |= 0x00000010u;
 }
 inline void Message_FCWConfig::clear_has_hoggroupthresholdinit() {
-  _has_bits_[0] &= ~0x00000020u;
+  _has_bits_[0] &= ~0x00000010u;
 }
 inline void Message_FCWConfig::clear_hoggroupthresholdinit() {
   hoggroupthresholdinit_ = 0;
@@ -1326,15 +1292,15 @@ inline void Message_FCWConfig::set_hoggroupthresholdinit(::google::protobuf::int
   // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.HOGgroupThresholdInit)
 }
 
-// required double HitThreshold = 7;
+// required double HitThreshold = 6;
 inline bool Message_FCWConfig::has_hitthreshold() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
+  return (_has_bits_[0] & 0x00000020u) != 0;
 }
 inline void Message_FCWConfig::set_has_hitthreshold() {
-  _has_bits_[0] |= 0x00000040u;
+  _has_bits_[0] |= 0x00000020u;
 }
 inline void Message_FCWConfig::clear_has_hitthreshold() {
-  _has_bits_[0] &= ~0x00000040u;
+  _has_bits_[0] &= ~0x00000020u;
 }
 inline void Message_FCWConfig::clear_hitthreshold() {
   hitthreshold_ = 0;
@@ -1350,15 +1316,15 @@ inline void Message_FCWConfig::set_hitthreshold(double value) {
   // @@protoc_insertion_point(field_set:ADAS_Debug_Application.Message.FCWConfig.HitThreshold)
 }
 
-// optional .ADAS_Debug_Application.Message.CustomField custom = 8;
+// optional .ADAS_Debug_Application.Message.CustomField custom = 7;
 inline bool Message_FCWConfig::has_custom() const {
-  return (_has_bits_[0] & 0x00000080u) != 0;
+  return (_has_bits_[0] & 0x00000040u) != 0;
 }
 inline void Message_FCWConfig::set_has_custom() {
-  _has_bits_[0] |= 0x00000080u;
+  _has_bits_[0] |= 0x00000040u;
 }
 inline void Message_FCWConfig::clear_has_custom() {
-  _has_bits_[0] &= ~0x00000080u;
+  _has_bits_[0] &= ~0x00000040u;
 }
 inline void Message_FCWConfig::clear_custom() {
   if (custom_ != NULL) custom_->::ADAS_Debug_Application::Message_CustomField::Clear();

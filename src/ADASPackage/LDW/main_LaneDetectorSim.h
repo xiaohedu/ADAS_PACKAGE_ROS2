@@ -34,7 +34,7 @@ struct LDW_Parameters
 
 {
     LDW_Parameters()
-        : LANE_DETECTOR(true)
+        : LANE_DETECTOR(false)
         , YAW_ANGLE(0)
         , PITCH_ANGLE(0.1)
         , coef_thetaMax(0.5)
@@ -42,9 +42,9 @@ struct LDW_Parameters
     {
     }
     
-    int LANE_DETECTOR = 1;
-    double YAW_ANGLE = 0.0;
-    double PITCH_ANGLE = 0.1;
+    int LANE_DETECTOR;
+    double YAW_ANGLE;
+    double PITCH_ANGLE;
     double coef_thetaMax;
     int filter_id;
     int combo_id;
@@ -79,8 +79,12 @@ public:
                 this->param_.PITCH_ANGLE = msg->pitch_angle;
                 this->param_.YAW_ANGLE = msg->yaw_angle;
                 this->param_.coef_thetaMax = msg->coef_thetamax;
-                this->param_.combo_id = msg->combo_id;
                 
+				if (this->param_.combo_id != msg->combo_id)
+				{
+					this->param_.combo_id = msg->combo_id;
+					this->init.store(false);
+				}
                 
                 if (msg->has_custom_field)
                 {
@@ -99,37 +103,43 @@ public:
                             case 0:
                              istringstream(msg->custom_value)>>boolalpha>>b;
                              adas_interfaces::LDWParameters::Boolean[msg->custom_id]=b;
-                             cout << "msg->custom_id : " << boolalpha <<adas_interfaces::LDWParameters::Boolean[msg->custom_id] << endl;
                             break;
                             
                 
                             //Int
                             case 1:
                                  i = std::stoi (msg->custom_value, &sz);
-                                 adas_interfaces::LDWParameters::String[msg->custom_id]=  i;
-                                 cout << "msg->custom_id : " << adas_interfaces::LDWParameters::String[msg->custom_id] << endl;
-                                   
+                                 adas_interfaces::LDWParameters::Int[msg->custom_id]=  i;
                             break;
                            
 
                             //String 
                             case 2:
                                     s= msg->custom_value;
-                                    adas_interfaces::LDWParameters::String[msg->custom_id]= s;
-                                    cout << "msg->custom_id : " << adas_interfaces::LDWParameters::String[msg->custom_id] << endl;
-                                   
+                                    adas_interfaces::LDWParameters::String[msg->custom_id]= s;       
                             break;
                             
                             
                             case 3:
                                     d = std::stod (msg->custom_value, &sz);
                                     adas_interfaces::LDWParameters::Double[msg->custom_id]=  d;
-                                    cout << "msg->custom_id : " << adas_interfaces::LDWParameters::Double[msg->custom_id] << endl;
-                            
                             break;
                         } 
-                    
+						
+						
+
+									
                 }
+				
+				
+					for (std::map<string,bool>::iterator it=adas_interfaces::LDWParameters::Boolean.begin(); it!=adas_interfaces::LDWParameters::Boolean.end(); ++it)
+					std::cout << it->first << " : " << it->second << '\n';
+					for (std::map<string,int>::iterator it=adas_interfaces::LDWParameters::Int.begin(); it!=adas_interfaces::LDWParameters::Int.end(); ++it)
+					std::cout << it->first << " : " << it->second << '\n';
+					for (std::map<string,double>::iterator it=adas_interfaces::LDWParameters::Double.begin(); it!=adas_interfaces::LDWParameters::Double.end(); ++it)
+					std::cout << it->first << " : " << it->second << '\n';
+					for (std::map<string,string>::iterator it=adas_interfaces::LDWParameters::String.begin(); it!=adas_interfaces::LDWParameters::String.end(); ++it)
+					std::cout << it->first << " : " << it->second << '\n';
 
                 }
                 
@@ -190,12 +200,10 @@ public:
 
                 laneMat = cvMat;
 
-                if(param_.LANE_DETECTOR && !init) 
+                if(param_.LANE_DETECTOR && !init.load()) 
                     
                 {
-                    
-                    
-                    
+
                         char fileName_test[200];
                         strcpy(fileName_test, "inputdata/LDWConfig/Lanes3.conf");
                     
@@ -315,13 +323,15 @@ public:
                                     pub_ptr->publish(msg); // Publish it along.
                         break;
                         
-                        
-                      case 3:  
-                        pub_ptr->publish(msg); // Publish it along.
-
-                        
+						
+  
                     }
                 }
+				
+				else
+				{
+					pub_ptr->publish(msg); // Publish it along.
+				}
                 if(IMAGE_RECORD) {
                     char* text = new char[100];
                     sprintf(text, LANE_RECORD_IMAGE, idx);
@@ -352,7 +362,7 @@ private:
     cv::Mat IPM_cont, particle_detect, particle_track;
     cv::KalmanFilter laneKalmanFilter = cv::KalmanFilter(8, 8, 0);
     cv::Mat laneKalmanMeasureMat = cv::Mat(8, 1, CV_32F, cv::Scalar::all(0));
-
+	std::atomic<bool> init{false};
 
 /*************JOOST*****************/
 
@@ -376,7 +386,7 @@ private:
     double execTime; // Execute Time for Each Frame
     // double pastTime;
 
-    bool init = false;
+    
 
     std::ofstream laneFeatureFile;
 
