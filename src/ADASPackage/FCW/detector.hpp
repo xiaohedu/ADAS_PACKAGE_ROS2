@@ -288,8 +288,8 @@ Detector::Detector(const std::string & input, const std::string & output) :
                   
                   
                   
-            std::cout << "======================================================" << endl;
-            std::cout << "               Configuring FCW Parameters             " << endl << endl;
+            std::cout << endl<< endl;
+            std::cout << "Configuring FCW Parameters:             " << endl << endl;
 
 
             if(msg)
@@ -369,7 +369,7 @@ Detector::Detector(const std::string & input, const std::string & output) :
             cout << "Hit threshold: " << hit_threshold << endl;
             cout << "Gamma correction: " << gamma_corr << endl<<endl;
             std::cout << "======================================================" << endl;
-            std::cout << "                FCW Configured"<<endl << endl << endl;;
+            std::cout << "FCW Configured."<<endl << endl << endl;;
 
         },
         rmw_qos_profile_default);
@@ -858,7 +858,7 @@ void Detector::before_run() {
 	// original code
 //     gpu_hog.setSVMDetector(detector);
 //     cpu_hog.setSVMDetector(detector);
-	ifstream file_classifiers_in("../inputdata/FCWdata/classifiers.txt"); // the text file containing the classifiers that will be used along the desired color
+	ifstream file_classifiers_in("inputdata/FCWdata/classifiers.txt"); // the text file containing the classifiers that will be used along the desired color
 	string classifier_line;    // the line read from the classifiers text file
 	string colors;    // the string containging the colors values
 	string green_blue; //The substring which will contain the color values for green and blue

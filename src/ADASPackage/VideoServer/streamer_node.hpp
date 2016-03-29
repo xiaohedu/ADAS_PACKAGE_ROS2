@@ -485,7 +485,7 @@ public:
                                 std::lock_guard<std::mutex> lock(mtx);
                                 cout << endl << endl << endl;
                                 cout << "======================================================" << endl;
-                                cout << "             Streaming server is UP!                 " << endl;
+                                cout << "             Streaming server is UP!                 " << endl<<endl;
                                 cout << "======================================================" << endl;
                                 cout << " Feeding LDW frames to --->" << app.IP_address << ":" << app.Port << endl << endl
                                     << endl;
@@ -537,7 +537,7 @@ public:
                                 std::lock_guard<std::mutex> lock(mtx);
                                 cout << endl << endl << endl;
                                 cout << "======================================================" << endl;
-                                cout << "             Streaming server is UP!                 " << endl;
+                                cout << "             Streaming server is UP!                 " << endl<<endl;
                                 cout << "======================================================" << endl;
                                 cout << " Feeding FCW frames to --->" << app.IP_address << ":" << app.Port << endl << endl
                                     << endl;

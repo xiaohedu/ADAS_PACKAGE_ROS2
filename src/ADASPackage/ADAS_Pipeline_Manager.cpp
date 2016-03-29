@@ -72,7 +72,7 @@ public:
 
                     else {
                         cerr << "======================================================" << endl;
-                        cerr << "Request received but failed to parse MessageType." << endl;
+                        cerr << "Error: Request received but failed to parse Message.  " << endl;
                         cerr << "======================================================" << endl << endl;
                     }
                 }
@@ -138,8 +138,7 @@ public:
             {
 
                 cout << "======================================================" << endl;
-                cout << "           Distributing request to ROS Nodes         " << endl;
-                cout << "======================================================" << endl;
+                cout << "           Distributing request to ROS Nodes         " << endl<<endl;
                 
 
                 std::lock_guard<std::mutex> lock(android_msg_mutex);
@@ -314,8 +313,6 @@ public:
                     
                       pub_ptr->publish(msg);
                 }
-
-                cout << "Request Processed. " << endl << endl;
                 client_request.store(false); // reset request boolean to false after processing
 
             } // skip if there is no request
@@ -399,16 +396,10 @@ int main(int argc, char* argv[])
              auto lanedetect_node = std::make_shared<LaneDetectNode>("image", "ldw_image");
              
 			 auto detector_node = std::make_shared<Detector>("image", "detector_image");
-             //auto cardetect_node = std::make_shared<App>("image", "fcw_image");
-             
-             //auto streamer_node_with_ldw = std::make_shared<Streamer>("lanedetect_image", IP, 5000);
-                 
+            
              auto streamer_node = std::make_shared<Streamer>("ldw_image","detector_image", IP, 5000);
             
-            // auto streamer_node_with_ldw   =   std::make_shared<Streamer>("image", "127.0.0.1", 5000);
-
-            // auto streamer_node_with_FCW     =   std::make_shared<Streamer>("image", args_streamer );
-
+            
             
                 executor.add_node(ADAS_command_server);
                 executor.add_node(source_node_manual);
@@ -421,7 +412,7 @@ int main(int argc, char* argv[])
             ////////////////////////////////////////////////////////////////////////
 
             cout << "======================================================" << endl;
-            cout << "              Spinning Started                       " << endl;
+            cout << "                 Spinning Started                     " << endl;
             cout << "======================================================" << endl;
             cout << "Spinning nodes.... " << endl << endl;
 

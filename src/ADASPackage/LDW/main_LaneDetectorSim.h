@@ -67,8 +67,8 @@ public:
             [this](adas_interfaces::msg::LDWParameters::UniquePtr msg) {
                 
                 
-            std::cout << "======================================================" << endl;
-            std::cout << "               Configuring LDW Parameters             " << endl << endl;
+            std::cout << endl << endl;
+            std::cout << "Configuring LDW Parameters:             " << endl << endl;
 
 
                 if(msg)
@@ -157,7 +157,7 @@ public:
             cout << "coef_thetaMax: " << param_.coef_thetaMax  << endl;
             cout << "Combination ID: " << param_.combo_id << endl<<endl;
             std::cout << "======================================================" << endl;
-            std::cout << "LDW Configured"<<endl << endl << endl;
+            std::cout << "LDW Configured."<<endl << endl << endl;
 
             },
             rmw_qos_profile_default);
@@ -309,7 +309,7 @@ public:
 										lastLateralOffset, lateralOffset, isChangeLane, detectLaneFlag,  idx, execTime, preHfLanes, changeDone, param_.YAW_ANGLE, param_.PITCH_ANGLE);
   
                                     
-                                   /*// laneMat.convertTo(laneMat, CV_8U);
+                                   laneMat.convertTo(laneMat, CV_8U);
                                     set_now(msg->header.stamp);
                                     msg->header.frame_id = "laneMat";
                                     msg->height = laneMat.cols;
@@ -318,7 +318,7 @@ public:
                                     msg->is_bigendian = false;
                                     msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(laneMat.step);
                                     msg->data.assign(laneMat.datastart, laneMat.dataend);
-                                    */
+                                    
                                     cv::imshow("LaneSystem", laneMat);
                                     pub_ptr->publish(msg); // Publish it along.
                         break;

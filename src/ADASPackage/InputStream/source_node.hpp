@@ -61,23 +61,25 @@ public:
                 }
 
                 if(this->source_.stopped.load() == true) {
+ 
+
+                    std::cout << "======================================================"<<endl;
+                    std::cout << "              Stopping the Source node                " << endl<<endl;
                     std::cout << "======================================================" << endl;
-                    std::cout << "              Stopping the Source node               " << endl;
-                    std::cout << "======================================================" << endl;
-                    std::cout << "stopped.... " << endl << endl;
+                    std::cout << "stopped." << endl << endl;
                 }
 
                 else if(this->source_.paused.load() == true) {
+                    std::cout << "======================================================"<<endl;
+                    std::cout << "              Pausing the Source node                 " << endl<<endl;
                     std::cout << "======================================================" << endl;
-                    std::cout << "              Pausing the Source node                 " << endl;
-                    std::cout << "======================================================" << endl;
-                    std::cout << "paused.... " << endl << endl;
+                    std::cout << "paused." << endl << endl;
                 }
                 
                  else
                 {
-                    std::cout << "======================================================" << endl;
-                    std::cout << "              Setting Source state to Play            " << endl;
+                    std::cout << "======================================================"<<endl;
+                    std::cout << "              Setting Source state to Play            " << endl<<endl;
                     std::cout << "======================================================" << endl;
                     std::cout << "playing.... " << endl << endl;
                 }
@@ -121,7 +123,7 @@ public:
         std::cout << "======================================================" << endl;
         std::cout << "              Destroying the Source node               " << endl;
         std::cout << "======================================================" << endl;
-        std::cout << "stopped.... " << endl << endl;
+        std::cout << "stopped." << endl << endl;
         
         
        source_.stopped.store(true);
@@ -178,6 +180,7 @@ public:
     void loop_FolderSrc()
     {
         int Idx = 1;
+        int tries=0;
         std::chrono::time_point<std::chrono::system_clock> start, end;
         std::string path = "inputdata/" + path_;
         
@@ -199,11 +202,27 @@ public:
             
               if (! frame_.data)
             {
-               source_.stopped.store(true);
-			   Idx=0;
+                if (tries>3){
+                    Idx=0;
+                    tries=0;
+                    cout<<"completely fucked";
+                    continue;
+                    
+                
+                }
+                    
+                else
+                {
+                    cout<<" fucked";
+                    tries++;
+                    Idx++;
+                    continue;
+                }
             }
             
             
+            if (frame_.cols == 0)
+                continue;
             // Create a new unique_ptr to an Image message for storage.
             sensor_msgs::msg::Image::UniquePtr msg(new sensor_msgs::msg::Image());
 
