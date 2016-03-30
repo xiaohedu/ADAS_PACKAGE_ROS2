@@ -205,7 +205,6 @@ public:
                 if (tries>3){
                     Idx=0;
                     tries=0;
-                    cout<<"completely fucked";
                     continue;
                     
                 
@@ -213,7 +212,6 @@ public:
                     
                 else
                 {
-                    cout<<" fucked";
                     tries++;
                     Idx++;
                     continue;

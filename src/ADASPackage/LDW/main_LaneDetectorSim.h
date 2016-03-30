@@ -273,7 +273,7 @@ public:
                         msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(IPM_OUT.step);
                         msg->data.assign(IPM_OUT.datastart, IPM_OUT.dataend);
                         pub_ptr->publish(msg); //Publish it along.
-                         cv::imshow("IPM_OUT", IPM_OUT);
+                         //cv::imshow("IPM_OUT", IPM_OUT);
                         break;
 
 
@@ -319,7 +319,7 @@ public:
                                     msg->step = static_cast<sensor_msgs::msg::Image::_step_type>(laneMat.step);
                                     msg->data.assign(laneMat.datastart, laneMat.dataend);
                                     
-                                    cv::imshow("LaneSystem", laneMat);
+                                    //cv::imshow("LaneSystem", laneMat);
                                     pub_ptr->publish(msg); // Publish it along.
                         break;
                         

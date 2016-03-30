@@ -460,8 +460,8 @@ void ShowImage(cv::Mat *ipmMat)
                                       leftPointSet.at(i).y += thMat.rows/4;
                                   }
                                 			int leftCloseDataNum = 50;
-                                			FittingCurve_LS(leftPointSet, termNum, leftCoefs);//PrintMat(leftCoefs);
-                                			//FittingCurve_RANSAC(leftPointSet, termNum, minDataNum, iterNum, thValue, leftCloseDataNum, leftCoefs, colorMat);
+                                			//FittingCurve_LS(leftPointSet, termNum, leftCoefs);//PrintMat(leftCoefs);
+                                			FittingCurve_RANSAC(leftPointSet, termNum, minDataNum, iterNum, thValue, leftCloseDataNum, leftCoefs, colorMat);
                                 			IPMDrawCurve(leftCoefs, colorMat, leftSampledPoints, CV_RGB(255, 0, 0));
                             		}
 
